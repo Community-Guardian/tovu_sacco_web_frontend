@@ -36,8 +36,8 @@ const services = [
 
 export default function Services() {
   return (
-    <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold text-primary mb-12 text-center">Our Services</h1>
+    <div className="container mx-auto py-6 px-4 md:px-8"> {/* Reduced top padding and increased left/right padding */}
+      <h1 className="text-4xl font-bold text-primary mb-8 text-center">Our Services</h1> {/* Reduced bottom margin */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, index) => (
           <Card
@@ -59,4 +59,3 @@ export default function Services() {
     </div>
   )
 }
-

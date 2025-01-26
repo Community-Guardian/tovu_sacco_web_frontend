@@ -47,26 +47,27 @@ export default function FAQPage() {
   )
 
   return (
-    <div className="container py-8 m-auto">
-      <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
-      <div className="max-w-xl mb-8">
-        <Input
-          type="search"
-          placeholder="Search FAQs..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full"
-        />
+    <div className="container mx-auto py-8">
+      <div className="max-w-5xl m-auto">
+        <h1 className="text-4xl font-bold mb-8 text-center">Frequently Asked Questions</h1> {/* Added text-center class */}
+        <div className="max-w-3xl m-auto mb-8">
+          <Input
+            type="search"
+            placeholder="Search FAQs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
+          {filteredFaqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger>{faq.question}</AccordionTrigger>
+              <AccordionContent>{faq.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
-      <Accordion type="single" collapsible className="w-full max-w-3xl">
-        {filteredFaqs.map((faq, index) => (
-          <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger>{faq.question}</AccordionTrigger>
-            <AccordionContent>{faq.answer}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
     </div>
   )
 }
-

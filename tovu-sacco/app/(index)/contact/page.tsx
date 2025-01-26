@@ -22,7 +22,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="container py-8">
+    <div className="container mx-auto py-8 px-4 md:px-8"> {/* Added horizontal padding */}
       <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
       <div className="grid gap-8 md:grid-cols-2">
         <Card className="p-6">
@@ -115,4 +115,3 @@ export default function ContactPage() {
     </div>
   )
 }
-

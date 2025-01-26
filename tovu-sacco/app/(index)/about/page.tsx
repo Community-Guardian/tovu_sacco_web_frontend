@@ -1,5 +1,5 @@
-import Image from "next/image"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AboutPage() {
   const team = [
@@ -18,10 +18,10 @@ export default function AboutPage() {
       role: "Financial Advisor",
       image: "https://www.shutterstock.com/shutterstock/videos/1034544401/thumb/1.jpg?ip=x480",
     },
-  ]
+  ];
 
   return (
-    <div className="container py-8 m-auto">
+    <div className="container py-8 mx-auto px-4 md:px-8">
       <section className="mb-12">
         <h1 className="text-4xl font-bold mb-6">About Tovu Sacco</h1>
         <div className="grid gap-8 md:grid-cols-2">
@@ -33,9 +33,13 @@ export default function AboutPage() {
               knowledge to build a secure financial future.
             </p>
             <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-6">
               To be the leading Sacco in fostering financial wellness and economic growth in our community, setting the
               standard for member-centric financial services.
+            </p>
+            <h2 className="text-2xl font-semibold mb-4">Our Core Values</h2>
+            <p className="text-muted-foreground mb-6">
+              The core values of Tovu Sacco are integrity, community focus, empowerment, innovation, responsibility, excellence, inclusivity, sustainability, respect, and accountability.
             </p>
           </div>
           <div className="relative h-[400px] rounded-lg overflow-hidden">
@@ -61,7 +65,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section>
+      <section className="mb-12">
         <h2 className="text-3xl font-bold mb-8">Our History</h2>
         <Card>
           <CardHeader>
@@ -77,6 +81,5 @@ export default function AboutPage() {
         </Card>
       </section>
     </div>
-  )
+  );
 }
-

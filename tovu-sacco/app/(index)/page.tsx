@@ -1,17 +1,17 @@
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, Shield, Users, CheckCircle2, Wallet, PiggyBank } from "lucide-react"
-import { Percent, Smartphone, GraduationCap, Clock, DollarSign } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ServicesGrid } from "@/components/services-grid"
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Shield, Users, CheckCircle2, Wallet, PiggyBank } from "lucide-react";
+import { Percent, Smartphone, GraduationCap, Clock, DollarSign } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ServicesGrid } from "@/components/services-grid";
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-16 lg:pt-24 m-auto">
-        <div className="container relative">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-4 lg:pt-8 m-auto"> {/* Further reduced margin-top */}
+        <div className="container relative px-4 md:px-8"> {/* Horizontal padding remains */}
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
@@ -89,7 +89,7 @@ export default function Home() {
       <ServicesGrid />
 
       {/* How It Works Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-24 m-auto">
+      <section className="relative overflow-hidden bg-muted/50 py-24 m-auto px-4 md:px-8"> {/* Added horizontal padding */}
         <div className="container relative z-10">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Goal Based Savings</h2>
@@ -97,35 +97,35 @@ export default function Home() {
           </div>
           <div className="grid gap-8 md:grid-cols-5">
             {[
-             {
-                  step: "1",
-                  title: "1. Be a Member",
-                  description: "Join our growing community",
-                  icon: Users,
+              {
+                step: "1",
+                title: "1. Be a Member",
+                description: "Join our growing community",
+                icon: Users,
               },
               {
-                  step: "2",
-                  title: "2. Set Your Goal",
-                  description: "Define your financial targets",
-                  icon: CheckCircle2,
+                step: "2",
+                title: "2. Set Your Goal",
+                description: "Define your financial targets",
+                icon: CheckCircle2,
               },
               {
-                  step: "3",
-                  title: "3. Start Saving",
-                  description: "Begin your savings journey",
-                  icon: Wallet,
+                step: "3",
+                title: "3. Start Saving",
+                description: "Begin your savings journey",
+                icon: Wallet,
               },
               {
-                  step: "4",
-                  title: "4. Top-Up by Tovu",
-                  description: "Get boosted by our rewards",
-                  icon: PiggyBank,
+                step: "4",
+                title: "4. Top-Up by Tovu",
+                description: "Get boosted by our rewards",
+                icon: PiggyBank,
               },
               {
-                  step: "5",
-                  title: "5. Celebrate Success",
-                  description: "Achieve your financial goals",
-                  icon: Shield,
+                step: "5",
+                title: "5. Celebrate Success",
+                description: "Achieve your financial goals",
+                icon: Shield,
               }
             ].map((item) => (
               <Card key={item.step} className="relative overflow-hidden border-none bg-background/60 backdrop-blur">
@@ -143,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 m-auto">
+      <section className="py-24 m-auto px-4 md:px-8"> {/* Added horizontal padding */}
         <div className="container">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Why Choose Tovu Sacco</h2>
@@ -199,7 +199,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-16  w-full">
+      <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8"> {/* Added horizontal padding */}
         <div className="container relative z-10 m-auto">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold">Ready to Get Started?</h2>
@@ -222,6 +222,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
-
