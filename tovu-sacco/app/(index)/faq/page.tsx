@@ -47,7 +47,7 @@ export default function FAQPage() {
   )
 
   return (
-    <div className="container py-8">
+    <div className="container py-8 m-auto">
       <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
       <div className="max-w-xl mb-8">
         <Input

@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-16 lg:pt-24">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-16 lg:pt-24 m-auto">
         <div className="container relative">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
@@ -89,7 +89,7 @@ export default function Home() {
       <ServicesGrid />
 
       {/* How It Works Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-24">
+      <section className="relative overflow-hidden bg-muted/50 py-24 m-auto">
         <div className="container relative z-10">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Goal Based Savings</h2>
@@ -98,35 +98,35 @@ export default function Home() {
           <div className="grid gap-8 md:grid-cols-5">
             {[
              {
-    step: "1",
-    title: "1. Be a Member",
-    description: "Join our growing community",
-    icon: Users,
-},
-{
-    step: "2",
-    title: "2. Set Your Goal",
-    description: "Define your financial targets",
-    icon: CheckCircle2,
-},
-{
-    step: "3",
-    title: "3. Start Saving",
-    description: "Begin your savings journey",
-    icon: Wallet,
-},
-{
-    step: "4",
-    title: "4. Top-Up by Tovu",
-    description: "Get boosted by our rewards",
-    icon: PiggyBank,
-},
-{
-    step: "5",
-    title: "5. Celebrate Success",
-    description: "Achieve your financial goals",
-    icon: Shield,
-}
+                  step: "1",
+                  title: "1. Be a Member",
+                  description: "Join our growing community",
+                  icon: Users,
+              },
+              {
+                  step: "2",
+                  title: "2. Set Your Goal",
+                  description: "Define your financial targets",
+                  icon: CheckCircle2,
+              },
+              {
+                  step: "3",
+                  title: "3. Start Saving",
+                  description: "Begin your savings journey",
+                  icon: Wallet,
+              },
+              {
+                  step: "4",
+                  title: "4. Top-Up by Tovu",
+                  description: "Get boosted by our rewards",
+                  icon: PiggyBank,
+              },
+              {
+                  step: "5",
+                  title: "5. Celebrate Success",
+                  description: "Achieve your financial goals",
+                  icon: Shield,
+              }
             ].map((item) => (
               <Card key={item.step} className="relative overflow-hidden border-none bg-background/60 backdrop-blur">
                 <CardContent className="pt-6">
@@ -143,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24">
+      <section className="py-24 m-auto">
         <div className="container">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Why Choose Tovu Sacco</h2>
@@ -199,8 +199,8 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-16">
-        <div className="container relative z-10">
+      <section className="relative overflow-hidden bg-muted/50 py-16  w-full">
+        <div className="container relative z-10 m-auto">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold">Ready to Get Started?</h2>
             <p className="mb-8 text-lg text-muted-foreground">

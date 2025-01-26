@@ -18,7 +18,7 @@ import {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+      <div className="container  flex h-16 items-center m-auto">
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -35,7 +35,7 @@ export function SiteHeader() {
         </Sheet>
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-01-25%20at%209.36.33%20PM-i5KdOWpGErHF8xVdumwjbzu5Huars5.jpeg"
+            src="/logo.png"
             alt="Tovu Sacco Logo"
             width={120}
             height={40}
