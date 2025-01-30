@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
+import Link from "next/link";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -9,7 +9,7 @@ export function SiteFooter() {
           <div>
             <h3 className="mb-3 text-lg font-semibold">About Tovu Sacco</h3>
             <p className="text-sm text-muted-foreground">
-              Empowering our members through financial inclusion, education, and support since 2010.
+              Empowering our members through financial inclusion, education, and support.
             </p>
           </div>
           <div>
@@ -40,30 +40,27 @@ export function SiteFooter() {
           <div>
             <h3 className="mb-3 text-lg font-semibold">Contact</h3>
             <ul className="space-y-1 text-sm">
-              <li className="text-muted-foreground">123 Sacco Street</li>
-              <li className="text-muted-foreground">Nairobi, Kenya</li>
-              <li className="text-muted-foreground">Phone: +254 123 456 789</li>
-              <li className="text-muted-foreground">Email: info@tovusacco.com</li>
+              <li className="text-muted-foreground">Wema Center,</li>
+              <li className="text-muted-foreground">Karuri – Banana</li>
+
+              <li className="text-muted-foreground">Phone: 0769 595 626</li>
+              <li className="text-muted-foreground">Email: info@tovusacco.org</li>
             </ul>
           </div>
           <div>
             <h3 className="mb-3 text-lg font-semibold">Follow Us</h3>
             <div className="flex space-x-3">
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://web.facebook.com/people/Tovu-Sacco/100085374290507/" className="text-muted-foreground hover:text-primary" target="_blank" rel="noopener noreferrer">
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://twitter.com/tovusacco" className="text-muted-foreground hover:text-primary" target="_blank" rel="noopener noreferrer">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://www.instagram.com/tovu_sacco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="text-muted-foreground hover:text-primary" target="_blank" rel="noopener noreferrer">
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
-                <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
               </Link>
             </div>
           </div>
@@ -85,5 +82,5 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

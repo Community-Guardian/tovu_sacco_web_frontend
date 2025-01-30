@@ -28,19 +28,20 @@ export default function AboutPage() {
           <div>
             <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
             <p className="text-muted-foreground mb-6">
-              At Tovu Sacco, our mission is to empower our members through financial inclusion, education, and support.
-              We strive to create a community where everyone has access to affordable financial services and the
-              knowledge to build a secure financial future.
+            Empowering Dreams Through Goal-Based Savings
+
+At Tovu SACCO, our mission is to empower individuals and communities to achieve their financial dreams through tailored goal-based savings plans. We are dedicated to providing personalized support, innovative financial solutions, and a collaborative environment to help our members reach their unique financial goals faster and more effectively.
             </p>
             <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
             <p className="text-muted-foreground mb-6">
-              To be the leading Sacco in fostering financial wellness and economic growth in our community, setting the
-              standard for member-centric financial services.
+            A Future Where Every Dream is Within Reach
+
+Our vision is to be the leading SACCO in fostering financial empowerment and goal achievement. We envision a future where every member, regardless of their background, has the tools, guidance, and support to turn their financial aspirations into reality. Through our commitment to goal-based savings, we aim to create a thriving community of financially empowered individuals driving positive change and prosperity.
             </p>
-            <h2 className="text-2xl font-semibold mb-4">Our Core Values</h2>
+            {/* <h2 className="text-2xl font-semibold mb-4">Our Core Values</h2>
             <p className="text-muted-foreground mb-6">
               The core values of Tovu Sacco are integrity, community focus, empowerment, innovation, responsibility, excellence, inclusivity, sustainability, respect, and accountability.
-            </p>
+            </p> */}
           </div>
           <div className="relative h-[400px] rounded-lg overflow-hidden">
             <Image src="https://www.runnymede.com/wp-content/uploads/2021/09/save-money.jpg" alt="Tovu Sacco Office" fill className="object-cover" />

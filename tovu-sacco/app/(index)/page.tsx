@@ -1,17 +1,19 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Shield, Users, CheckCircle2, Wallet, PiggyBank } from "lucide-react";
-import { Percent, Smartphone, GraduationCap, Clock, DollarSign } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ServicesGrid } from "@/components/services-grid";
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight, Shield, Users, CheckCircle2, Wallet, PiggyBank } from "lucide-react"
+import { Percent, Smartphone, GraduationCap, Clock, DollarSign } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { ServicesGrid } from "@/components/services-grid"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { AnimatedStat } from "@/components/AnimatedStat"
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-4 lg:pt-8 m-auto"> {/* Further reduced margin-top */}
-        <div className="container relative px-4 md:px-8"> {/* Horizontal padding remains */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-4 lg:pt-8 m-auto">
+        <div className="container relative px-4 md:px-8">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
@@ -51,7 +53,7 @@ export default function Home() {
                   <p className="text-sm text-muted-foreground">Joined by over 50,000 members</p>
                 </div>
               </div>
-              <div className="mt-12 flex gap-8 border-t pt-8">
+              <div className="mt-12 flex gap-8 border-t pt-8 flex-wrap">
                 <div className="flex items-center gap-2">
                   <Shield className="h-12 w-12 text-primary" />
                   <div>
@@ -76,7 +78,7 @@ export default function Home() {
                   width={500}
                   height={600}
                   alt="Goal Based Savings Process"
-                  className="relative mx-auto rounded-lg shadow-xl"
+                  className="relative mx-auto rounded-lg shadow-xl w-full max-w-sm"
                   priority
                 />
               </div>
@@ -89,13 +91,13 @@ export default function Home() {
       <ServicesGrid />
 
       {/* How It Works Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-24 m-auto px-4 md:px-8"> {/* Added horizontal padding */}
+      <section className="relative overflow-hidden bg-muted/50 py-24 m-auto px-4 md:px-8">
         <div className="container relative z-10">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Goal Based Savings</h2>
             <p className="text-lg text-muted-foreground">Follow our proven process to achieve your financial goals</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-5">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
             {[
               {
                 step: "1",
@@ -126,7 +128,7 @@ export default function Home() {
                 title: "5. Celebrate Success",
                 description: "Achieve your financial goals",
                 icon: Shield,
-              }
+              },
             ].map((item) => (
               <Card key={item.step} className="relative overflow-hidden border-none bg-background/60 backdrop-blur">
                 <CardContent className="pt-6">
@@ -143,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 m-auto px-4 md:px-8"> {/* Added horizontal padding */}
+      <section className="py-24 m-auto px-4 md:px-8">
         <div className="container">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Why Choose Tovu Sacco</h2>
@@ -198,13 +200,85 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Community Section */}
+      <section className="py-24 bg-gradient-to-b from-primary/5 to-background px-4 md:px-8">
+        <div className="container grid gap-8 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-6 text-3xl font-bold sm:text-4xl">Join the community of dreamers</h2>
+            <p className="text-lg text-muted-foreground">
+              When you become a member of Tovu SACCO, you're not just opening a savings account; you're joining a
+              community of like-minded individuals who are all working towards a brighter future. Share your progress,
+              learn from others, and be inspired by success stories from members who have achieved their goals with Tovu
+              SACCO's support.
+            </p>
+          </div>
+          <div>
+            <h2 className="mb-6 text-3xl font-bold sm:text-4xl">Our credit products</h2>
+            <div className="space-y-4">
+              <Accordion type="single" collapsible>
+                <AccordionItem value="salary-advance">
+                  <AccordionTrigger>Salary Advance Loan</AccordionTrigger>
+                  <AccordionContent>
+                    Introducing our Salary Advance Loan, designed to provide employed members with quick access to funds
+                    based on their upcoming salary, ensuring financial flexibility when it's needed most.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="kumi-kumi">
+                  <AccordionTrigger>Kumi Kumi Loan</AccordionTrigger>
+                  <AccordionContent>
+                    Our flexible Kumi Kumi loan product designed to meet your short-term financial needs.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="land-asset">
+                  <AccordionTrigger>Land Asset Financing</AccordionTrigger>
+                  <AccordionContent>Secure financing for your land acquisition and development needs.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="okoa">
+                  <AccordionTrigger>Okoa Member Loan</AccordionTrigger>
+                  <AccordionContent>Emergency financial support when you need it most.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="tovu-care">
+                  <AccordionTrigger>TOVU Care</AccordionTrigger>
+                  <AccordionContent>Healthcare financing solutions for your medical needs.</AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-24 bg-green-50 text-black px-4 md:px-8">
+        <div className="container">
+          <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-2">
+              <AnimatedStat end={1000} duration={2000} suffix="+" />
+              <p className="text-green-700">Members supported</p>
+            </div>
+            <div className="space-y-2">
+              <AnimatedStat end={5000000} duration={2000} suffix="+" />
+              <p className="text-green-700">Loans disbursed</p>
+            </div>
+            <div className="space-y-2">
+              <AnimatedStat end={10} duration={2000} />
+              <p className="text-green-700">Presence in Major towns across Kenya</p>
+            </div>
+            <div className="space-y-2">
+              <AnimatedStat end={2} duration={2000} />
+              <p className="text-green-700">Years of service</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8"> {/* Added horizontal padding */}
+      <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8">
         <div className="container relative z-10 m-auto">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold">Ready to Get Started?</h2>
+            <h2 className="mb-4 text-3xl font-bold">Unlock more with Tovu SACCO!</h2>
             <p className="mb-8 text-lg text-muted-foreground">
-              Join thousands of members who trust Tovu Sacco with their financial future
+              Our members can access up to 5x their savings, turning small steps into giant leaps towards their
+              financial goals. Join us today and see how far your savings can take you!
             </p>
             <div className="flex flex-col gap-4 sm:flex-row justify-center">
               <Link href="/membership">
@@ -222,5 +296,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  );
+  )
 }

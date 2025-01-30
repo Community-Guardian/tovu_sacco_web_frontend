@@ -3,11 +3,14 @@ import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Tovu Sacco",
   description: "Empowering your financial future through community savings and loans.",
+  icons: {
+    icon: "/download.png",
+    apple: "/download.png",
+  },
 }
-
 export default function RootLayout({
   children,
 }: {

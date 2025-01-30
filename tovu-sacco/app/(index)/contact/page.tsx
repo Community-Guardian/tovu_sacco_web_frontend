@@ -22,7 +22,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-8"> {/* Added horizontal padding */}
+    <div className="container mx-auto py-8 px-4 md:px-8">
       <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
       <div className="grid gap-8 md:grid-cols-2">
         <Card className="p-6">
@@ -77,18 +77,16 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-semibold">Address</h3>
                 <p className="text-muted-foreground">
-                  123 Sacco Street
-                  <br />
-                  Nairobi, Kenya
+                  Wema Center, Karuri – Banana
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold">Phone</h3>
-                <p className="text-muted-foreground">+254 123 456 789</p>
+                <p className="text-muted-foreground">0769 595 626</p>
               </div>
               <div>
                 <h3 className="font-semibold">Email</h3>
-                <p className="text-muted-foreground">info@tovusacco.com</p>
+                <p className="text-muted-foreground">info@tovusacco.org</p>
               </div>
             </div>
           </Card>
