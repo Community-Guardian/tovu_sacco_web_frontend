@@ -10,9 +10,9 @@ import { AnimatedStat } from "@/components/AnimatedStat"
 
 export default function Home() {
   return (
-    <div className="flex flex-col ">
+    <div className="flex bg-gradient-to-b from-primary/5 to-background flex-col w-full ">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-4 lg:pt-8 m-auto">
+      <section className="relative overflow-hidden  pt-4 lg:pt-8 m-auto ">
         <div className="container relative px-4 md:px-8">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
@@ -201,7 +201,7 @@ export default function Home() {
       </section>
 
       {/* Community Section */}
-      <section className="py-24 bg-gradient-to-b from-primary/5 to-background px-4 md:px-8">
+      <section className="py-24 bg-gradient-to-b from-primary/5 to-background px-4 md:px-8 m-auto">
         <div className="container grid gap-8 lg:grid-cols-2">
           <div>
             <h2 className="mb-6 text-3xl font-bold sm:text-4xl">Join the community of dreamers</h2>
@@ -248,7 +248,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 bg-green-50 text-black px-4 md:px-8">
+      <section className="py-24 bg-green-50 text-black px-4 md:px-8 m-auto">
         <div className="container">
           <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">

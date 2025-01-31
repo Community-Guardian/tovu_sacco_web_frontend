@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
   title: "Tovu Sacco",
   description: "Empowering your financial future through community savings and loans.",
   icons: {
-    icon: "/download.png",
-    apple: "/download.png",
+    icon: "@/assets/download.png",
+    apple: "@/assets/download.png",
   },
 }
 export default function RootLayout({
