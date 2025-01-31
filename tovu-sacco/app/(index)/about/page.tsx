@@ -55,7 +55,7 @@ export default function AboutPage() {
             <Card key={member.name}>
               <CardHeader>
                 <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
-                  <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
+                  <Image src={member.image || "/assets/placeholder.svg"} alt={member.name} fill className="object-cover" />
                 </div>
                 <CardTitle>{member.name}</CardTitle>
                 <CardDescription>{member.role}</CardDescription>

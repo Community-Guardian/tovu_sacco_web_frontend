@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useRouter } from "next/navigation";
 
 export default function MembershipPage() {
   const [step, setStep] = useState(1)
@@ -20,9 +21,10 @@ export default function MembershipPage() {
     monthlyIncome: "",
     agreeToTerms: false,
   })
-
+  const router = useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    router.replace('dashboard')
     // Handle form submission
     console.log(formData)
   }

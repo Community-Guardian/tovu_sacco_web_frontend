@@ -7,7 +7,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="bg-primary text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center">
-            <Image src="/tovu-sacco-logo.png" alt="Tovu Sacco Logo" width={50} height={50} />
+            <Image src="/assets/tovu-sacco-logo.png" alt="Tovu Sacco Logo" width={50} height={50} />
             <span className="ml-2 text-2xl font-bold">Tovu Sacco</span>
           </Link>
           <nav>

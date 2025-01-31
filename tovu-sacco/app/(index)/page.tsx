@@ -8,10 +8,10 @@ import { ServicesGrid } from "@/components/services-grid";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background pt-4 lg:pt-8 m-auto"> {/* Further reduced margin-top */}
-        <div className="container relative px-4 md:px-8"> {/* Horizontal padding remains */}
+        <div className="container relative px-4 md:px-8 md:py-4"> {/* Horizontal padding remains */}
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">

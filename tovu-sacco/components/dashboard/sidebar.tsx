@@ -6,6 +6,7 @@ import { LayoutDashboard, LineChart, History, PiggyBank, UserCircle, Bell, LogOu
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation";
 
 const sidebarItems = [
   {
@@ -42,7 +43,7 @@ const sidebarItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
-
+  const router = useRouter();
   return (
     <div className="flex h-full flex-col gap-4">
       <div className="flex-1 space-y-1">
@@ -55,7 +56,7 @@ export function Sidebar() {
           </Link>
         ))}
       </div>
-      <Button variant="ghost" className="justify-start gap-2 text-destructive">
+      <Button variant="ghost" className="justify-start gap-2 text-destructive" onClick={() => { router.push("/") }}>
         <LogOut className="h-5 w-5" />
         Logout
       </Button>

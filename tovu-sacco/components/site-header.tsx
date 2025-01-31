@@ -35,7 +35,7 @@ export function SiteHeader() {
         </Sheet>
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Image
-            src="/logo.png"
+            src="/assets/logo.png"
             alt="Tovu Sacco Logo"
             width={120}
             height={40}

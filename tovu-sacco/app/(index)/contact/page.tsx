@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,7 +13,6 @@ export default function ContactPage() {
     phone: "",
     message: "",
   })
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle form submission
