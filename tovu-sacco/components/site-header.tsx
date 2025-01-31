@@ -35,7 +35,7 @@ export function SiteHeader() {
         </Sheet>
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Image
-            src="/assets/logo.png"
+            src="/download.png"
             alt="Tovu Sacco Logo"
             width={120}
             height={40}
@@ -108,7 +108,7 @@ function MobileNav() {
     <div className="grid gap-2 p-4">
       <Link href="/" className="flex items-center space-x-2">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-01-25%20at%209.36.33%20PM-i5KdOWpGErHF8xVdumwjbzu5Huars5.jpeg"
+          src="/download.png"
           alt="Tovu Sacco Logo"
           width={120}
           height={40}
