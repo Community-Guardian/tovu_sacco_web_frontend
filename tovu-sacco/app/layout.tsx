@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: "Tovu Sacco",
   description: "Empowering your financial future through community savings and loans.",
   icons: {
-    icon: "@/assets/download.png",
-    apple: "@/assets/download.png",
+    icon: "/assets/download.png",
+    apple: "/assets/download.png",
   },
 }
 export default function RootLayout({

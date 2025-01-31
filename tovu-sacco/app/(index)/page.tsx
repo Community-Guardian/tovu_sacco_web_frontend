@@ -71,18 +71,18 @@ export default function Home() {
               </div>
             </div>
             <div className="relative hidden lg:block">
-              <div className="absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 blur-3xl" />
-              <div className="relative">
-                <Image
-                  src="https://i.insider.com/65567c184ca513d8242af58d?width=1200&format=jpeg"
-                  width={500}
-                  height={600}
-                  alt="Goal Based Savings Process"
-                  className="relative mx-auto rounded-lg shadow-xl w-full max-w-sm"
-                  priority
-                />
-              </div>
-            </div>
+  <div className="absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 blur-3xl" />
+  <div className="relative">
+    <Image
+      src="https://i.insider.com/65567c184ca513d8242af58d?width=1200&format=jpeg"
+      width={600}  // Increased width
+      height={1200} // Increased height
+      alt="Goal Based Savings Process"
+      className="relative mx-auto rounded-lg shadow-xl w-full max-w-2xl" // Increased max width
+      priority
+    />
+  </div>
+</div>
           </div>
         </div>
       </section>
