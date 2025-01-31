@@ -71,18 +71,18 @@ export default function Home() {
               </div>
             </div>
             <div className="relative hidden lg:block">
-  <div className="absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 blur-3xl" />
-  <div className="relative">
-    <Image
-      src="https://i.insider.com/65567c184ca513d8242af58d?width=1200&format=jpeg"
-      width={600}  // Increased width
-      height={1200} // Increased height
-      alt="Goal Based Savings Process"
-      className="relative mx-auto rounded-lg shadow-xl w-full max-w-2xl" // Increased max width
-      priority
-    />
-  </div>
-</div>
+              <div className="absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 blur-3xl" />
+              <div className="relative">
+                <Image
+                  src="https://i.insider.com/65567c184ca513d8242af58d?width=1200&format=jpeg"
+                  width={600} // Increased width
+                  height={1200} // Increased height
+                  alt="Goal Based Savings Process"
+                  className="relative mx-auto rounded-lg shadow-xl w-full max-w-2xl" // Increased max width
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -271,6 +271,51 @@ export default function Home() {
         </div>
       </section>
 
+      {/* App Download Section */}
+      <section className="py-24 bg-gradient-to-b from-background to-primary/5 px-4 md:px-8">
+        <div className="container">
+          <div className="grid gap-8 lg:grid-cols-2 items-center">
+            <div className="flex flex-col gap-6">
+              <h2 className="text-3xl font-bold sm:text-4xl">Download Our Mobile App</h2>
+              <p className="text-lg text-muted-foreground">
+                Experience the convenience of managing your Sacco account on the go. Access your accounts, make
+                transactions, and track your savings goals anytime, anywhere with our secure mobile app.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="lg" className="bg-primary">
+                  {/* <Image src="/google-play.png" alt="Get it on Google Play" width={24} height={24} className="mr-2" /> */}
+                  Google Play
+                </Button>
+                <Button size="lg" variant="outline">
+                  {/* <Image src="/app-store.png" alt="Download on App Store" width={24} height={24} className="mr-2" /> */}
+                  App Store
+                </Button>
+              </div>
+              <div className="flex items-center gap-4 mt-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  <span className="text-sm">Secure & Protected</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  <span className="text-sm">Easy to Use</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative mx-auto max-w-sm">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-primary-dark/20 rounded-3xl blur-2xl" />
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-01-31%20at%209.55.52%20PM-76LdUYsRjTttf5LBoFEt5fPZ8R2qO5.jpeg"
+                alt="Tovu Sacco Mobile App"
+                width={300}
+                height={600}
+                className="relative rounded-3xl shadow-2xl mx-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8">
         <div className="container relative z-10 m-auto">
@@ -298,3 +343,4 @@ export default function Home() {
     </div>
   )
 }
+
