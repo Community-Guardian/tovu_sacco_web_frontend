@@ -1,40 +1,24 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-
-interface LoanApplication {
-  id: number
-  loan_type: number
-  amount_requested: string
-  amount_approved: string
-  interest_rate: string
-  date_requested: string
-  date_approved: string
-  due_date: string
-  status: string
-  is_active: boolean
-  account: string
-  approvee: string
-}
-
-const loanApplications: LoanApplication[] = [
-  {
-    id: 1,
-    loan_type: 1,
-    amount_requested: "50000",
-    amount_approved: "45000",
-    interest_rate: "12.5",
-    date_requested: "2023-05-15",
-    date_approved: "2023-05-20",
-    due_date: "2024-05-20",
-    status: "Approved",
-    is_active: true,
-    account: "1234567890",
-    approvee: "John Doe",
-  },
-  // Add more dummy data as needed
-]
+"use client"
+import { useEffect } from "react";
+import { useLoans } from "@/context/LoansContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export function LoanApplications() {
+  const { loanApplications, fetchLoanApplications, loading, error } = useLoans();
+
+  useEffect(() => {
+    fetchLoanApplications();
+  }, [fetchLoanApplications]);
+
+  if (loading) {
+    return <p className="text-green-700">Loading loan applications...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error: {error}</p>;
+  }
+
   return (
     <Card className="bg-green-50 border-green-200">
       <CardHeader>
@@ -52,19 +36,26 @@ export function LoanApplications() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loanApplications.map((loan) => (
-              <TableRow key={loan.id} className="border-b border-green-200">
-                <TableCell>{loan.loan_type}</TableCell>
-                <TableCell>KES {Number.parseFloat(loan.amount_approved || loan.amount_requested).toFixed(2)}</TableCell>
-                <TableCell>{loan.interest_rate}%</TableCell>
-                <TableCell className="font-medium text-green-700">{loan.status}</TableCell>
-                <TableCell>{new Date(loan.due_date).toLocaleDateString()}</TableCell>
+            {loanApplications.length > 0 ? (
+              loanApplications.map((loan) => (
+                <TableRow key={loan.id} className="border-b border-green-200">
+                  <TableCell>{loan.loan_type}</TableCell>
+                  <TableCell>KES {Number.parseFloat(loan.amount_approved || loan.amount_requested).toFixed(2)}</TableCell>
+                  <TableCell>{loan.interest_rate}%</TableCell>
+                  <TableCell className="font-medium text-green-700">{loan.status}</TableCell>
+                  <TableCell>{new Date(loan.due_date).toLocaleDateString()}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center text-gray-500">
+                  No loan applications found.
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }
-

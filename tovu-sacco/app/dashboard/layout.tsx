@@ -7,6 +7,7 @@ import { User } from "@/types";
 import { useEffect, useState } from "react";
 import { TransactionsProvider } from "@/context/TransactionsContext";
 import { SavingsProvider } from "@/context/SavingsContext";
+import {LoansProvider} from "@/context/LoansContext"
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, getUser } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 p-6">
         <TransactionsProvider>
           <SavingsProvider>
+          <LoansProvider>
             {children}
+            </LoansProvider>
           </SavingsProvider>
         </TransactionsProvider>          
         </main>
