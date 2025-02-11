@@ -5,7 +5,8 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import { useAuth } from "@/context/AuthContext";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
-
+import { TransactionsProvider } from "@/context/TransactionsContext";
+import { SavingsProvider } from "@/context/SavingsContext";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, getUser } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
       <div className="flex flex-1 flex-col">
         <DashboardHeader />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6">
+        <TransactionsProvider>
+          <SavingsProvider>
+            {children}
+          </SavingsProvider>
+        </TransactionsProvider>          
+        </main>
       </div>
     </div>
   );

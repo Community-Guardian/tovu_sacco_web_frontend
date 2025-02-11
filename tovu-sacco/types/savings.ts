@@ -102,7 +102,7 @@ export interface Goal {
     account: number | undefined;  // Account ID
     name: string;
     description: string | null;
-    target_amount: string;  // Store as string to preserve decimal precision
+    target_amount: number;  // Store as string to preserve decimal precision
     deadline: string;  // Date as string in the format 'YYYY-MM-DD'
     cover_icon: string | null;  // URL to the cover image
     color: string;  // Hex color for frontend personalization
@@ -114,8 +114,8 @@ export interface Goal {
   export interface UpdateGoalRequest {
     name?: string;
     description?: string;
-    target_amount?: string;  // Store as string to preserve decimal precision
-    current_amount?: string;  // Store as string to preserve decimal precision
+    target_amount?: number;  // Store as string to preserve decimal precision
+    current_amount?: number;  // Store as string to preserve decimal precision
     deadline?: string;  // Date as string in the format 'YYYY-MM-DD'
     cover_icon?: string | null;
     color?: string;  // Hex color for frontend personalization

@@ -91,16 +91,16 @@ export const LoansProvider = ({ children }: { children: ReactNode }) => {
     fetchData: fetchUserLoanRequirements,
   } = useApi<UserLoanRequirement>(USER_LOAN_REQUIREMENTS_URL);
 
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
+  // useEffect(() => {
+  //   if (localStorage.getItem('accessToken')) { // Check if accessToken exists
 
-    fetchLoanTypes();
-    fetchLoanApplications();
-    fetchLoanRepayments();
-    fetchLoanRequirements();
-    fetchUserLoanRequirements();
-    }
-  }, [currentPage]);
+  //   fetchLoanTypes();
+  //   fetchLoanApplications();
+  //   fetchLoanRepayments();
+  //   fetchLoanRequirements();
+  //   fetchUserLoanRequirements();
+  //   }
+  // }, [currentPage]);
 
   return (
     <LoansContext.Provider

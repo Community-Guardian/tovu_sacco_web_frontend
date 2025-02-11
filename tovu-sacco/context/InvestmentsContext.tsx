@@ -90,16 +90,16 @@ export const InvestmentsProvider = ({ children }: { children: ReactNode }) => {
     fetchData: fetchDividends,
   } = useApi<any>(DIVIDENDS_URL);
 
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
+  // useEffect(() => {
+  //   if (localStorage.getItem('accessToken')) { // Check if accessToken exists
 
-    fetchInvestmentTypes();
-    fetchInvestments();
-    fetchInvestmentAccounts();
-    fetchUserInvestments();
-    fetchDividends();
-    }
-  }, [currentPage]);
+  //   fetchInvestmentTypes();
+  //   fetchInvestments();
+  //   fetchInvestmentAccounts();
+  //   fetchUserInvestments();
+  //   fetchDividends();
+  //   }
+  // }, [currentPage]);
 
   return (
     <InvestmentsContext.Provider

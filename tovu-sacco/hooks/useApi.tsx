@@ -42,8 +42,8 @@ function useApi<T>(url: string) {
         page_size: pageSize,
       });
 
-      const response = await api.get<ApiResponse<T>>(`${url}${queryString}`);
-      setData(response.data.results);
+      const response = await api.get<any>(`${url}${queryString}`);
+      setData(response.data);
       setTotalPages(Math.ceil(response.data.count / pageSize));
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);

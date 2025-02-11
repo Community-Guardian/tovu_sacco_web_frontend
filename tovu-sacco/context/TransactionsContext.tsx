@@ -143,94 +143,95 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   } = useApi<AuditTransaction>(AUDIT_TRANSACTION_URL);
 
   // Generic transaction handling
-  const createTransaction = (url: string, data: Partial<BaseTransaction>) => {
-    switch (url) {
-      case TRANSFER_URL:
+  const createTransaction = (transaction_type: string, data: Partial<BaseTransaction>) => {
+    switch (transaction_type) {
+      case 'transfer':
         return createTransfer(data as Partial<TransferTransaction>);
-      case WITHDRAWAL_URL:
+      case 'withdraw':
         return createWithdrawal(data as Partial<WithdrawalTransaction>);
-      case REFUND_URL:
+      case 'refund':
         return createRefund(data as Partial<RefundTransaction>);
-      case DEPOSIT_URL:
+      case 'deposit':
         return createDeposit(data as Partial<DepositTransaction>);
-      case LOAN_TRANSACTION_URL:
+      case 'loan':
         return createLoanTransaction(data as Partial<LoanTransaction>);
-      case INVESTMENT_TRANSACTION_URL:
+      case 'investment':
         return createInvestmentTransaction(data as Partial<InvestmentTransaction>);
-      case SAVING_TRANSACTION_URL:
+      case 'saving':
         return createSavingTransaction(data as Partial<SavingTransaction>);
-      case MINIMUM_SHARES_DEPOSIT_URL:
-        return createMinimumSharesDeposit(data as Partial<MinimumSharesDepositTransaction>);
-      case AUDIT_TRANSACTION_URL:
-        return createAuditTransaction(data as Partial<AuditTransaction>);
+      // case MINIMUM_SHARES_DEPOSIT_URL:
+      //   return createMinimumSharesDeposit(data as Partial<MinimumSharesDepositTransaction>);
+      // case AUDIT_TRANSACTION_URL:
+      //   return createAuditTransaction(data as Partial<AuditTransaction>);
       default:
         console.error("Invalid transaction type");
     }
   };
 
-  const updateTransaction = (url: string, id: number, data: Partial<BaseTransaction>) => {
-    switch (url) {
-      case TRANSFER_URL:
+  const updateTransaction = (transaction_type: string, id: number, data: Partial<BaseTransaction>) => {
+    switch (transaction_type) {
+      case 'transfer':
         return updateTransfer(id, data as Partial<TransferTransaction>);
-      case WITHDRAWAL_URL:
+      case 'withdraw':
         return updateWithdrawal(id, data as Partial<WithdrawalTransaction>);
-      case REFUND_URL:
+      case 'refund':
         return updateRefund(id, data as Partial<RefundTransaction>);
-      case DEPOSIT_URL:
+      case 'deposit':
         return updateDeposit(id, data as Partial<DepositTransaction>);
-      case LOAN_TRANSACTION_URL:
+      case 'loan':
         return updateLoanTransaction(id, data as Partial<LoanTransaction>);
-      case INVESTMENT_TRANSACTION_URL:
+      case 'investment':
         return updateInvestmentTransaction(id, data as Partial<InvestmentTransaction>);
-      case SAVING_TRANSACTION_URL:
+      case 'saving':
         return updateSavingTransaction(id, data as Partial<SavingTransaction>);
-      case MINIMUM_SHARES_DEPOSIT_URL:
-        return updateMinimumSharesDeposit(id, data as Partial<MinimumSharesDepositTransaction>);
-      case AUDIT_TRANSACTION_URL:
-        return updateAuditTransaction(id, data as Partial<AuditTransaction>);
+      // case MINIMUM_SHARES_DEPOSIT_URL:
+      //   return updateMinimumSharesDeposit(id, data as Partial<MinimumSharesDepositTransaction>);
+      // case AUDIT_TRANSACTION_URL:
+      //   return updateAuditTransaction(id, data as Partial<AuditTransaction>);
       default:
         console.error("Invalid transaction type");
     }
   };
 
-  const deleteTransaction = (url: string, id: number) => {
-    switch (url) {
-      case TRANSFER_URL:
+  const deleteTransaction = (transaction_type: string, id: number) => {
+    switch (transaction_type) {
+      case'transfer':
         return deleteTransfer(id);
-      case WITHDRAWAL_URL:
+      case 'withdrawal' :
         return deleteWithdrawal(id);
-      case REFUND_URL:
+      case 'refund':
         return deleteRefund(id);
-      case DEPOSIT_URL:
+      case 'deposit':
         return deleteDeposit(id);
-      case LOAN_TRANSACTION_URL:
+      case 'loan':
         return deleteLoanTransaction(id);
-      case INVESTMENT_TRANSACTION_URL:
+      case 'investment':
         return deleteInvestmentTransaction(id);
-      case SAVING_TRANSACTION_URL:
+      case 'saving':
         return deleteSavingTransaction(id);
-      case MINIMUM_SHARES_DEPOSIT_URL:
-        return deleteMinimumSharesDeposit(id);
-      case AUDIT_TRANSACTION_URL:
-        return deleteAuditTransaction(id);
+      // case MINIMUM_SHARES_DEPOSIT_URL:
+      //   return deleteMinimumSharesDeposit(id);
+      // case AUDIT_TRANSACTION_URL:
+      //   return deleteAuditTransaction(id);
       default:
         console.error("Invalid transaction type");
+        throw new Error("Invalid transaction type");
     }
   };
 
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
-    fetchTransfers();
-    fetchWithdrawals();
-    fetchRefunds();
-    fetchDeposits();
-    fetchLoans();
-    fetchInvestments();
-    fetchSavings();
-    fetchMinimumSharesDeposits();
-    fetchAudits();
-    }
-  }, [currentPage]);
+  // useEffect(() => {
+  //   if (localStorage.getItem('accessToken')) { // Check if accessToken exists
+  //   fetchTransfers();
+  //   fetchWithdrawals();
+  //   fetchRefunds();
+  //   fetchDeposits();
+  //   fetchLoans();
+  //   fetchInvestments();
+  //   fetchSavings();
+  //   fetchMinimumSharesDeposits();
+  //   fetchAudits();
+  //   }
+  // }, [currentPage]);
 
   return (
     <TransactionsContext.Provider

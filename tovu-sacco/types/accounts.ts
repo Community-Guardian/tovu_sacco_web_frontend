@@ -15,7 +15,7 @@ export interface KYC {
   gender: string;
   identity_type: string;
   id_number: string;
-  identity_image: string;
+  identity_image: 'national_id_card' | 'drivers_licence' | 'international_passport';
   date_of_birth: string; // Use ISO 8601 format
   signature: string | null;
   kra_pin: string;

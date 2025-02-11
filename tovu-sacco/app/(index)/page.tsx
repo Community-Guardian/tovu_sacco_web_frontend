@@ -27,10 +27,12 @@ export default function Home() {
                 wealth with our community-focused solutions.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
-                <Button size="lg" className="bg-primary text-lg">
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link href="/signup" >
+                  <Button size="lg" className="bg-primary text-lg" >
+                      Get Started
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-2">
                     {[...Array(4)].map((_, i) => (

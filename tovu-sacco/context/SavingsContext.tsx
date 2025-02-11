@@ -1,6 +1,6 @@
-"use client"
-import { createContext, useContext, ReactNode, useEffect } from 'react';
-import useApi from '@/hooks/useApi';
+"use client";
+import { createContext, useContext, ReactNode } from "react";
+import useApi from "@/hooks/useApi";
 import {
   Goal,
   Deposit,
@@ -8,7 +8,7 @@ import {
   SavingReminder,
   TransactionHistory,
   GoalNotification,
-} from '@/types/savings';
+} from "@/types/savings";
 import {
   GOALS_URL,
   DEPOSITS_URL,
@@ -16,9 +16,7 @@ import {
   REMINDERS_URL,
   TRANSACTIONS_URL,
   NOTIFICATIONS_URL,
-  GOAL_PROGRESS_URL,
-  MAKE_DEPOSIT_URL,
-} from '@/handler/apiConfig';
+} from "@/handler/apiConfig";
 
 interface SavingsContextProps {
   goals: Goal[];
@@ -41,6 +39,12 @@ interface SavingsContextProps {
   makeDeposit: (data: Partial<Deposit>) => void;
   updateDeposit: (id: number, data: Partial<Deposit>) => void;
   deleteDeposit: (id: number) => void;
+  makeMilestone: (data: Partial<SavingMilestone>) => void;
+  updateMilestone: (id: number, data: Partial<SavingMilestone>) => void;
+  deleteMilestone: (id: number) => void;
+  createReminder: (data: Partial<SavingReminder>) => void; // ✅ Create
+  updateReminder: (id: number, data: Partial<SavingReminder>) => void; // ✅ Update
+  deleteReminder: (id: number) => void; // ✅ Delete
   currentPage: number;
   totalPages: number;
   nextPage: () => void;
@@ -76,21 +80,24 @@ export const SavingsProvider = ({ children }: { children: ReactNode }) => {
     deleteItem: deleteDeposit,
   } = useApi<Deposit>(DEPOSITS_URL);
 
-  const { data: milestones, fetchData: fetchMilestones } = useApi<SavingMilestone>(MILESTONES_URL);
-  const { data: reminders, fetchData: fetchReminders } = useApi<SavingReminder>(REMINDERS_URL);
+  const {
+    data: milestones,
+    fetchData: fetchMilestones,
+    addItem: makeMilestone,
+    updateItem: updateMilestone,
+    deleteItem: deleteMilestone,
+  } = useApi<SavingMilestone>(MILESTONES_URL);
+
+  const {
+    data: reminders,
+    fetchData: fetchReminders,
+    addItem: createReminder, // ✅ Create Reminder
+    updateItem: updateReminder, // ✅ Update Reminder
+    deleteItem: deleteReminder, // ✅ Delete Reminder
+  } = useApi<SavingReminder>(REMINDERS_URL);
+
   const { data: transactions, fetchData: fetchTransactions } = useApi<TransactionHistory>(TRANSACTIONS_URL);
   const { data: notifications, fetchData: fetchNotifications } = useApi<GoalNotification>(NOTIFICATIONS_URL);
-
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
-    fetchGoals();
-    fetchDeposits();
-    fetchMilestones();
-    fetchReminders();
-    fetchTransactions();
-    fetchNotifications();
-    }
-  }, [currentPage]);
 
   return (
     <SavingsContext.Provider
@@ -115,6 +122,12 @@ export const SavingsProvider = ({ children }: { children: ReactNode }) => {
         makeDeposit,
         updateDeposit,
         deleteDeposit,
+        makeMilestone,
+        updateMilestone,
+        deleteMilestone,
+        createReminder, // ✅ Provide function
+        updateReminder, // ✅ Provide function
+        deleteReminder, // ✅ Provide function
         currentPage,
         totalPages,
         nextPage,
@@ -132,7 +145,7 @@ export const SavingsProvider = ({ children }: { children: ReactNode }) => {
 export const useSavings = (): SavingsContextProps => {
   const context = useContext(SavingsContext);
   if (!context) {
-    throw new Error('useSavings must be used within a SavingsProvider');
+    throw new Error("useSavings must be used within a SavingsProvider");
   }
   return context;
 };

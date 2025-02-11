@@ -3,6 +3,9 @@ import "./globals.css"
 import { Metadata } from "next"
 import { AuthProvider } from "@/context/AuthContext"
 import { AccountsProvider } from "@/context/AccountsContext"
+import { ToastProvider } from "@/components/ui/toast"
+import { Toaster } from "@/components/ui/toaster";
+import { UserProvider } from "@/context/userContext"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -23,11 +26,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="relative flex min-h-screen flex-col">
           <main className="flex-1">
-            <AuthProvider>
-              <AccountsProvider>
-                {children}
-              </AccountsProvider>
-            </AuthProvider>
+            <UserProvider>
+              <ToastProvider>
+                <AuthProvider>
+                  <AccountsProvider>
+                    {children}
+                    <Toaster />
+                  </AccountsProvider>
+                </AuthProvider>
+              </ToastProvider>
+            </UserProvider>
           </main>
         </div>
       </body>

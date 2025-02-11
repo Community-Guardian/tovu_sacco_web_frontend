@@ -65,13 +65,13 @@ export const AccountsProvider = ({ children }: { children: ReactNode }) => {
     deleteItem: deleteNextOfKin,
   } = useApi<NextOfKin>(NEXT_OF_KINS_URL);
 
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
-    fetchAccounts();
-    fetchKYC();
-    fetchNextOfKins();
-    }
-  }, [currentPage]);
+  // useEffect(() => {
+  //   if (localStorage.getItem('accessToken')) { // Check if accessToken exists
+  //   fetchAccounts();
+  //   fetchKYC();
+  //   fetchNextOfKins();
+  //   }
+  // }, [currentPage]);
 
   return (
     <AccountsContext.Provider
