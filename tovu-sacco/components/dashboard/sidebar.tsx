@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, LineChart, History, PiggyBank, UserCircle, Bell, LogOut } from "lucide-react";
+import { LayoutDashboard, LineChart, History, PiggyBank, UserCircle, Bell, LogOut, CreditCard } from "lucide-react"; // We import the new icon here
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,10 @@ import { User } from "@/types";
 
 const sidebarItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "Analysis", href: "/dashboard/analysis", icon: LineChart },
+  { title: "Savings", href: "/dashboard/savings", icon: LineChart }, // Replace with the correct Savings icon
   { title: "Transactions", href: "/dashboard/transactions", icon: History },
   { title: "Investments", href: "/dashboard/investments", icon: PiggyBank },
+  { title: "Loans", href: "/dashboard/loans", icon: CreditCard }, // New Loans item
   { title: "Profile", href: "/dashboard/profile", icon: UserCircle },
   { title: "Notifications", href: "/dashboard/notifications", icon: Bell },
 ];
