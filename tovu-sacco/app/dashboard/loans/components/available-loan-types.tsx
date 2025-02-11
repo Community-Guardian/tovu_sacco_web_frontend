@@ -1,35 +1,20 @@
+"use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-
-interface LoanType {
-  id: number
-  name: string
-  description: string
-  interest_rate: string
-  min_amount: string
-  max_amount: string
-  max_duration_months: number
-  requirements: { id: number; name: string }[]
-}
-
-const loanTypes: LoanType[] = [
-  {
-    id: 1,
-    name: "Personal Loan",
-    description: "For personal expenses and emergencies",
-    interest_rate: "15.5",
-    min_amount: "10000",
-    max_amount: "500000",
-    max_duration_months: 24,
-    requirements: [
-      { id: 1, name: "Valid ID" },
-      { id: 2, name: "Proof of Income" },
-    ],
-  },
-  // Add more dummy data as needed
-]
+import { useEffect } from "react";
+import { useLoans } from "@/context/LoansContext";
 
 export function AvailableLoanTypes() {
+  const { loanTypes, fetchLoanTypes, loading, error } = useLoans();
+
+  useEffect(() => {
+    fetchLoanTypes();
+  }, []);
+
+  if (loading) return <p>Loading loan types...</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
+  if (loanTypes.length === 0) return <p>No available loan types.</p>;
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {loanTypes.map((loanType) => (
@@ -44,10 +29,7 @@ export function AvailableLoanTypes() {
                 Interest Rate: <span className="font-semibold">{loanType.interest_rate}%</span>
               </p>
               <p>
-                Amount:{" "}
-                <span className="font-semibold">
-                  KES {loanType.min_amount} - {loanType.max_amount}
-                </span>
+                Amount: <span className="font-semibold">KES {loanType.min_amount} - {loanType.max_amount}</span>
               </p>
               <p>
                 Max Duration: <span className="font-semibold">{loanType.max_duration_months} months</span>
@@ -66,6 +48,5 @@ export function AvailableLoanTypes() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
-
