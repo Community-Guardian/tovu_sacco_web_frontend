@@ -78,9 +78,11 @@ export function InvestmentsList() {
             (type) => type.id === investment.investment_type
           )
           const progressValue =
-            (Number(investment.current_value) /
-              Number(investment.amount_invested)) *
-            100
+          Number(investment.amount_invested) === 0
+            ? 0
+            : (Number(investment.current_value ?? 0) /
+                Number(investment.amount_invested ?? 1)) *
+              100;
 
           return (
             <Card key={investment.id}>
@@ -103,12 +105,12 @@ export function InvestmentsList() {
                   </div>
                   <span
                     className={
-                      investment.roi_percentage >= 0
+                      Number(investment.return_on_investment) >= 0
                         ? "text-green-500"
                         : "text-red-500"
                     }
                   >
-                    {investment.roi_percentage.toFixed(2)}%
+                    {investment.return_on_investment}%
                   </span>
                 </div>
 

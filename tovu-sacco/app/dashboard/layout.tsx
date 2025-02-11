@@ -35,12 +35,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 p-6">
         <TransactionsProvider>
           <SavingsProvider>
-          <LoansProvider>
-            {children}
+            <LoansProvider>
+              <InvestmentsProvider>
+                {children}
+              </InvestmentsProvider>
             </LoansProvider>
-            <InvestmentsProvider>
-              {children}
-            </InvestmentsProvider>
           </SavingsProvider>
         </TransactionsProvider>          
         </main>

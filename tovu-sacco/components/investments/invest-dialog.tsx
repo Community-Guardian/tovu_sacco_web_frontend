@@ -25,8 +25,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { useInvestments } from "@/context/InvestmentsContext"
 import { Loader2 } from 'lucide-react'
 import { formatCurrency } from "@/lib/utils"
-import type { Investment } from "@/types/investments"
-
+import type { Investment, InvestmentType, InvestmentAccount } from "@/types/investments"
+import { useAccounts } from "@/context/AccountsContext"
 const investSchema = z.object({
   amount: z.string().min(1, "Amount is required"),
 })
@@ -37,68 +37,69 @@ interface InvestDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export function InvestDialog({
-  investment,
-  open,
-  onOpenChange,
-}: InvestDialogProps) {
-  const { investmentTypes, createUserInvestment, loading } = useInvestments()
+export function InvestDialog({ investment, open, onOpenChange }: InvestDialogProps) {
+  const { investmentTypes, investmentAccounts, createUserInvestment, loading } = useInvestments()
   const { toast } = useToast()
+  const { accounts } = useAccounts(); 
+  const investmentType = investmentTypes.find((type: InvestmentType) => type.id === investment.investment_type)
 
-  const investmentType = investmentTypes.find(
-    (type) => type.id === investment.investment_type
-  )
+  // Find the user's investment account for this investment type
+  const account = investmentAccounts.find((acc: InvestmentAccount) => acc.account === accounts[0].account_number.toString());
+  const minAmount = Number(investmentType?.minAmount ?? 0);
+  const maxAmount = account
+    ? Number(account.investment_limit) - Number(account.total_investments)
+    : Infinity;
 
   const form = useForm<z.infer<typeof investSchema>>({
     resolver: zodResolver(investSchema),
-    defaultValues: {
-      amount: "",
-    },
-  })
+    defaultValues: { amount: "" },
+  });
 
   const onSubmit = async (values: z.infer<typeof investSchema>) => {
     try {
-      const amount = Number(values.amount)
-      const minAmount = Number(investmentType?.minAmount || 0)
-      const maxAmount = Number(investmentType?.maxAmount || Infinity)
+      const amount = parseFloat(values.amount);
+      if (isNaN(amount)) {
+        form.setError("amount", { type: "manual", message: "Invalid amount" });
+        return;
+      }
 
       if (amount < minAmount) {
         form.setError("amount", {
           type: "manual",
           message: `Minimum investment amount is ${formatCurrency(minAmount)}`,
-        })
-        return
+        });
+        return;
       }
 
       if (amount > maxAmount) {
         form.setError("amount", {
           type: "manual",
           message: `Maximum investment amount is ${formatCurrency(maxAmount)}`,
-        })
-        return
+        });
+        return;
       }
 
       await createUserInvestment({
         investment: investment.id,
         invested_amount: values.amount,
         date_added: new Date().toISOString(),
-      })
+      });
 
       toast({
         title: "Investment Created",
         description: "Your investment has been successfully created.",
-      })
+      });
 
-      form.reset()
-      onOpenChange(false)
+      form.reset();
+      onOpenChange(false);
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to create investment. Please try again.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -106,8 +107,8 @@ export function InvestDialog({
         <DialogHeader>
           <DialogTitle>Invest in {investmentType?.name}</DialogTitle>
           <DialogDescription>
-            Enter the amount you want to invest. Minimum:{" "}
-            {formatCurrency(Number(investmentType?.minAmount))}
+            Enter the amount you want to invest. Minimum: {" "}
+            {formatCurrency(minAmount)}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -122,7 +123,7 @@ export function InvestDialog({
                     <Input {...field} type="number" min="0" step="0.01" />
                   </FormControl>
                   <FormDescription>
-                    Interest Rate: {investmentType?.interestRate}%
+                    Interest Rate: {investment?.return_on_investment || 0}%
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +133,7 @@ export function InvestDialog({
             <div className="space-y-2 rounded-md bg-muted p-4">
               <div className="flex justify-between text-sm">
                 <span>Duration</span>
-                <span>{investmentType?.duration}</span>
+                <span>{investment?.maturity_date}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Expected Return</span>
