@@ -14,7 +14,7 @@ export default function LoanRepayment({ loanId }: LoanRepaymentProps) {
 
   const handleRepay = () => {
     if (!amount) return alert("Enter a valid amount");
-    createLoanRepayment({ loan_id: loanId, amount: parseFloat(amount) });
+    createLoanRepayment({ loan: loanId, amount: parseFloat(amount) });
     setAmount("");
   };
 
@@ -24,7 +24,7 @@ export default function LoanRepayment({ loanId }: LoanRepaymentProps) {
       <Input
         type="number"
         placeholder="Enter amount"
-        value={amount}
+        value={amount.toString()}
         onChange={(e) => setAmount(e.target.value)}
         className="mt-2"
       />

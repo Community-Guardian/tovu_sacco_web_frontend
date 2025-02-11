@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 import { useLoans } from "@/context/LoansContext";
 import { useAuth } from "@/context/AuthContext"; // Assuming you have an Auth Context
 import { LoanApplication } from "@/types/loans";
-
+import { useAccounts } from "@/context/AccountsContext";
 export function AvailableLoanTypes() {
   const { loanTypes, fetchLoanTypes, createLoanApplication, loading, error } = useLoans();
   const { user } = useAuth(); // Assuming user context contains logged-in user details
   const [selectedLoan, setSelectedLoan] = useState<number | null>(null);
   const [amountRequested, setAmountRequested] = useState("");
   const [dueDate, setDueDate] = useState("");
-
+  const {accounts} = useAccounts();
   const handleApply = (loanTypeId: number) => {
     setSelectedLoan(loanTypeId);
   };
@@ -25,7 +25,7 @@ export function AvailableLoanTypes() {
       amount_requested: amountRequested,
       date_requested: new Date().toISOString(),
       due_date: dueDate,
-      account: user?.account || "", // Ensure account is fetched from logged-in user
+      account: accounts[0].account_number, // Ensure account is fetched from logged-in user
     };
 
     await createLoanApplication(newLoanApplication);

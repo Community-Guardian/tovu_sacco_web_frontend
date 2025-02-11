@@ -34,7 +34,7 @@ export interface LoanRequirement {
   }
   export interface LoanRepayment {
     id: number;
-    amount: string;
+    amount: number;
     payment_date: string; // ISO 8601 format
     loan: number; // Assuming loan is an ID referring to a loan
   }

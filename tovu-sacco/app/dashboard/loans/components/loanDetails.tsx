@@ -22,7 +22,7 @@ export default function LoanDetails({ loanId, onBack }: LoanDetailsProps) {
   if (loading) return <p className="text-green-700">Loading loan details...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
-  const repayments = loanRepayments.filter((repay) => repay.loan_id === loanId);
+  const repayments = loanRepayments.filter((repay) => repay.id === loanId);
 
   return (
     <Card className="bg-white border-green-300 shadow-lg p-4">
@@ -38,7 +38,7 @@ export default function LoanDetails({ loanId, onBack }: LoanDetailsProps) {
         <h3 className="text-green-700 mt-4 font-semibold">Loan Repayments</h3>
         {repayments.length > 0 ? (
           repayments.map((repay) => (
-            <p key={repay.id} className="text-green-600">Paid: KES {repay.amount} on {new Date(repay.date).toLocaleDateString()}</p>
+            <p key={repay.id} className="text-green-600">Paid: KES {repay.amount} on {new Date(repay.payment_date).toLocaleDateString()}</p>
           ))
         ) : (
           <p className="text-gray-500">No repayments yet.</p>
