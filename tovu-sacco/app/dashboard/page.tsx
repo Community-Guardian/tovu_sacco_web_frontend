@@ -1,134 +1,180 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowDownIcon, ArrowUpIcon, DollarSign, LineChart } from "lucide-react"
-import { cn } from "@/lib/utils"
+"use client";
+import { useAccounts } from "@/context/AccountsContext";
+import { useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { LoanApplication } from "@/types/loans";
+import { Investment } from "@/types/investments";
+import { Goal } from "@/types/savings";
+import { useLoans } from "@/context/LoansContext";
+import { formatCurrency, formatDate } from "@/utils/formatters";
+import { useInvestments } from "@/context/InvestmentsContext";
+import { useSavings } from "@/context/SavingsContext";
+import { useTransactions } from "@/context/TransactionsContext";
 
 export default function DashboardPage() {
+  const {
+    accounts,
+    kycRecords,
+    nextOfKins,
+    fetchAccounts,
+    fetchKYC,
+    fetchNextOfKins,
+  } = useAccounts();
+  const { loanApplications } = useLoans();
+  const { investments } = useInvestments();
+  const { goals } = useSavings();
+  const { transactions } = useSavings();
+
+  const account = accounts?.[0]; // Assuming one account per user
+  const kyc = kycRecords?.[0];
+  const activeLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Approved") || [];
+  const pendingLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Pending") || [];
+
   return (
-    <div className="space-y-8">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="p-6">
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
+      <Separator className="my-4" />
+
+      {/* Account Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardHeader>
+            <CardTitle>Account Balance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES 45,231.89</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <p className="text-xl font-bold">{formatCurrency(account?.account_balance)}</p>
+            <p className="text-sm text-gray-500">Minimum Shares: {formatCurrency(account?.account_minimum_shares_balance)}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Savings</CardTitle>
-            <ArrowUpIcon className="h-4 w-4 text-green-500" />
+          <CardHeader>
+            <CardTitle>Account Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES 12,234.00</div>
-            <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+            <p className={`text-xl font-bold ${account?.is_active ? "text-green-600" : "text-red-600"}`}>
+              {account?.is_active ? "Active" : "Suspended"}
+            </p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Loans</CardTitle>
-            <ArrowDownIcon className="h-4 w-4 text-red-500" />
+          <CardHeader>
+            <CardTitle>KYC Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KES 8,345.23</div>
-            <p className="text-xs text-muted-foreground">-4.5% from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Investments</CardTitle>
-            <LineChart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KES 24,652.66</div>
-            <p className="text-xs text-muted-foreground">+8.2% from last month</p>
+            <p className={`text-xl font-bold ${kyc?.kyc_confirmed ? "text-green-600" : "text-yellow-500"}`}>
+              {kyc?.kyc_confirmed ? "Verified" : "Pending Verification"}
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+      {/* Loan Overview */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Loan Overview</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Loans</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {activeLoans.length > 0 ? (
+                activeLoans.map((loan) => (
+                  <p key={loan.id}>
+                    {loan.loan_type} - {formatCurrency(loan.amount_approved as string)}
+                  </p>
+                ))
+              ) : (
+                <p>No active loans</p>
+              )}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Pending Applications</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {pendingLoans.length > 0 ? (
+                pendingLoans.map((loan) => (
+                  <p key={loan.id}>
+                    {loan.loan_type} - {formatCurrency(loan.amount_requested)}
+                  </p>
+                ))
+              ) : (
+                <p>No pending loans</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Investments Overview */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Investment Summary</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+          {investments.length > 0 ? (
+            investments.map((investment) => (
+              <Card key={investment.id}>
+                <CardHeader>
+                  <CardTitle>{investment.investment_type}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>Amount: {formatCurrency(investment.amount_invested)}</p>
+                  <p>ROI: {investment.roi_percentage}%</p>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p>No investments</p>
+          )}
+        </div>
+      </div>
+
+      {/* Savings & Goals */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Savings & Goals</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+          {goals.length > 0 ? (
+            goals.map((goal) => (
+              <Card key={goal.id}>
+                <CardHeader>
+                  <CardTitle>{goal.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>Target: {formatCurrency(goal.target_amount)}</p>
+                  <p>Saved: {formatCurrency(goal.current_amount)}</p>
+                  <p>Progress: {goal.progress_percentage}%</p>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p>No savings goals</p>
+          )}
+        </div>
+      </div>
+
+      {/* Transactions */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Recent Transactions</h2>
+        <Card className="mt-2">
           <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
+            <CardTitle>Transaction History</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {[
-                {
-                  title: "Deposit",
-                  amount: "+ KES 2,500.00",
-                  date: "2024-01-25",
-                  type: "credit",
-                },
-                {
-                  title: "Loan Payment",
-                  amount: "- KES 1,200.00",
-                  date: "2024-01-24",
-                  type: "debit",
-                },
-                {
-                  title: "Investment Return",
-                  amount: "+ KES 450.00",
-                  date: "2024-01-23",
-                  type: "credit",
-                },
-              ].map((transaction) => (
-                <div key={transaction.date} className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">{transaction.title}</p>
-                    <p className="text-xs text-muted-foreground">{transaction.date}</p>
-                  </div>
-                  <div
-                    className={cn(
-                      "text-sm font-medium",
-                      transaction.type === "credit" ? "text-green-500" : "text-red-500",
-                    )}
-                  >
-                    {transaction.amount}
-                  </div>
+            {transactions.length > 0 ? (
+              transactions.slice(0, 5).map((txn) => (
+                <div key={txn.id} className="flex justify-between py-2 border-b last:border-none">
+                  <span>{txn.transaction_type}</span>
+                  <span className="font-bold">{formatCurrency(txn.amount)}</span>
+                  <span className="text-sm text-gray-500">{formatDate(txn.date)}</span>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Investment Portfolio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                {
-                  title: "Fixed Deposit",
-                  amount: "KES 15,000.00",
-                  return: "8.5%",
-                },
-                {
-                  title: "Savings Plus",
-                  amount: "KES 7,500.00",
-                  return: "6.2%",
-                },
-                {
-                  title: "Holiday Fund",
-                  amount: "KES 2,152.66",
-                  return: "5.0%",
-                },
-              ].map((investment) => (
-                <div key={investment.title} className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">{investment.title}</p>
-                    <p className="text-xs text-green-500">Return: {investment.return}</p>
-                  </div>
-                  <div className="text-sm font-medium">{investment.amount}</div>
-                </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <p>No transactions</p>
+            )}
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }
-

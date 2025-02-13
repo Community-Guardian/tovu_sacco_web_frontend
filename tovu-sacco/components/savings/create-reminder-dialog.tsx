@@ -13,7 +13,7 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Goal } from "@/types/savings"
 import { useSavings } from "@/context/SavingsContext"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
 const reminderSchema = z.object({
   reminder_type: z.string().min(1, "Reminder type is required"),

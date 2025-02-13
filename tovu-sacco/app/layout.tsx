@@ -5,6 +5,8 @@ import { AuthProvider } from "@/context/AuthContext"
 import { AccountsProvider } from "@/context/AccountsContext";
 import { ToastProvider } from "@/components/ui/toast"
 import { Toaster } from "@/components/ui/toaster";
+import { NotificationsProvider, useNotifications } from "@/context/NotificationContexts";
+
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -25,14 +27,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="relative flex min-h-screen flex-col">
           <main className="flex-1">
-            <ToastProvider>
-              <AuthProvider>
-                <AccountsProvider>
-                  {children}
-                  <Toaster />
-                </AccountsProvider>
-              </AuthProvider>
-            </ToastProvider>
+            <NotificationsProvider>
+              <ToastProvider>
+                <AuthProvider>
+                  <AccountsProvider>
+                    {children}
+                    <Toaster />
+                  </AccountsProvider>
+                </AuthProvider>
+              </ToastProvider>
+            </NotificationsProvider>
           </main>
         </div>
       </body>

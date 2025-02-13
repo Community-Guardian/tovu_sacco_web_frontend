@@ -7,16 +7,20 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AlertCircle, ArrowUpCircle, Bell, CheckCircle2, Clock, Target } from 'lucide-react'
 import { formatCurrency } from "@/lib/utils"
+import { useState ,useEffect} from "react";
 
 export function SavingsDashboard() {
   const {
-    goals,
-    transactions,
-    notifications,
+    goals = [],
+    transactions = [],
+    notifications = [],
     loading,
     error,
+    fetchGoals,
   } = useSavings()
-
+  useEffect(() => {
+    fetchGoals();
+  }, []);
   if (loading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -41,16 +45,13 @@ export function SavingsDashboard() {
   }
 
   // Calculate total savings across all goals
-  const totalSavings = goals.reduce(
-    (acc, goal) => acc + Number(goal.current_amount),
-    0
-  )
+  const totalSavings = goals.reduce((acc, goal) => acc + Number(goal.current_amount || 0), 0)
 
   // Calculate total target amount
-  const totalTarget = goals.reduce(
-    (acc, goal) => acc + Number(goal.target_amount),
-    0
-  )
+  const totalTarget = goals.reduce((acc, goal) => acc + Number(goal.target_amount || 0), 0)
+
+  // Ensure we don't divide by zero
+  const progressPercentage = totalTarget > 0 ? (totalSavings / totalTarget) * 100 : 0
 
   // Get recent transactions
   const recentTransactions = transactions.slice(0, 5)
@@ -69,12 +70,9 @@ export function SavingsDashboard() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{formatCurrency(totalSavings)}</div>
-          <Progress
-            value={(totalSavings / totalTarget) * 100}
-            className="mt-2"
-          />
+          <Progress value={progressPercentage} className="mt-2" />
           <p className="mt-2 text-xs text-muted-foreground">
-            {((totalSavings / totalTarget) * 100).toFixed(1)}% of total goal
+            {progressPercentage.toFixed(1)}% of total goal
           </p>
         </CardContent>
       </Card>
@@ -109,11 +107,11 @@ export function SavingsDashboard() {
                 <div className="flex items-center space-x-2">
                   <ArrowUpCircle className="h-4 w-4 text-green-500" />
                   <span>
-                    {formatCurrency(Number(transaction.amount))}
+                    {formatCurrency(Number(transaction.amount || 0))}
                   </span>
                 </div>
                 <span className="text-muted-foreground">
-                  {new Date(transaction.date).toLocaleDateString()}
+                  {transaction.date ? new Date(transaction.date).toLocaleDateString() : "N/A"}
                 </span>
               </div>
             ))}

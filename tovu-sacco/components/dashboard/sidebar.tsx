@@ -44,7 +44,7 @@ export function Sidebar({ user }: SidebarProps) {
           <p className="font-semibold text-[15px]">{user.first_name} {user.last_name}</p>
 
           {/* ✅ Prevent Email Overflow */}
-          <div className="text-sm text-gray-600 truncate max-w-[200px]">{user.email}</div>
+          <div className="text-xs text-gray-600 truncate max-w-[200px]">{user.email}</div>
 
           <p className="text-xs text-primary font-semibold capitalize mt-1">{user.role}</p>
         </div>

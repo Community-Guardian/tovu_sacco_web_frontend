@@ -15,7 +15,7 @@ import { useSavings } from "@/context/SavingsContext"
 import { CalendarIcon, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Goal, UpdateGoalRequest } from "@/types/savings"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
 const editGoalSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),

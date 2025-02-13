@@ -13,7 +13,7 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Goal } from "@/types/savings"
 import { useSavings } from "@/context/SavingsContext"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
 const milestoneSchema = z.object({
   milestone_amount: z.string().min(1, "Amount is required"),
@@ -37,31 +37,30 @@ export function CreateMilestoneDialog({ goal, open, onOpenChange }: CreateMilest
   })
   const { makeMilestone:createMilestone , loading } = useSavings()
   const { toast } = useToast()
-
   const onSubmit = async (values: z.infer<typeof milestoneSchema>) => {
     try {
       await createMilestone({
         goal: goal.id,
         milestone_amount: values.milestone_amount,
-        milestone_date: values.milestone_date.toISOString(),
-      })
-
+        milestone_date: values.milestone_date.toISOString().split("T")[0], // 🔹 Formats to "YYYY-MM-DD"
+      });
+  
       toast({
         title: "Milestone Created",
         description: "New milestone has been successfully created.",
-      })
-
-      form.reset()
-      onOpenChange(false)
+      });
+  
+      form.reset();
+      onOpenChange(false);
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to create milestone. Please try again.",
         variant: "destructive",
-      })
+      });
     }
-  }
-
+  };
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">

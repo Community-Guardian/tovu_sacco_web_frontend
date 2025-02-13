@@ -1,16 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SavingsDashboard } from "@/components/savings/savings-dashboard"
-import { GoalsList } from "@/components/savings/goals-list"
-import { TransactionsList } from "@/components/savings/transactions-list"
-import { CreateGoalDialog } from "@/components/savings/create-goal-dialog"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SavingsDashboard } from "@/components/savings/savings-dashboard";
+import { GoalsList } from "@/components/savings/goals-list";
+import { TransactionsList } from "@/components/savings/transactions-list";
+import { CreateGoalDialog } from "@/components/savings/create-goal-dialog";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useSavings } from "@/context/SavingsContext";
 
 export default function SavingsPage() {
-  const [showCreateGoal, setShowCreateGoal] = useState(false)
+  const [showCreateGoal, setShowCreateGoal] = useState(false);
+  const { fetchDeposits, fetchGoals, fetchMilestones, fetchNotifications, fetchReminders, fetchTransactions } = useSavings();
+
+  // 🔹 Fetch data when component mounts
+  useEffect(() => {
+    fetchGoals();
+    fetchDeposits();
+    fetchMilestones();
+    fetchReminders();
+    fetchNotifications();
+    fetchTransactions();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -44,6 +56,5 @@ export default function SavingsPage() {
 
       <CreateGoalDialog open={showCreateGoal} onOpenChange={setShowCreateGoal} />
     </div>
-  )
+  );
 }
-

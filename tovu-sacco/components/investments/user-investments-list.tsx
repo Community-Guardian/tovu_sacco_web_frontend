@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { AlertCircle, ArrowDownCircle, ArrowUpCircle, MoreHorizontal } from 'lucide-react'
 import {
   DropdownMenu,

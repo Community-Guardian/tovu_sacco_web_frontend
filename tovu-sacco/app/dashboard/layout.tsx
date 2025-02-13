@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -14,7 +14,9 @@ import { SavingsProvider } from "@/context/SavingsContext";
 import { LoansProvider } from "@/context/LoansContext";
 import { InvestmentsProvider } from "@/context/InvestmentsContext";
 import { UserProvider } from "@/context/userContext";
+import { NotificationsProvider, useNotifications } from "@/context/NotificationContexts";
 import { User } from "@/types";
+import dayjs from "dayjs";
 
 // 🔹 Loading Component
 function LoadingScreen({ message }: { message: string }) {
@@ -31,8 +33,9 @@ function LoadingScreen({ message }: { message: string }) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, getUser } = useAuth();
   const { accounts, fetchAccounts } = useAccounts();
+  const { userNotifications, adminNotifications } = useNotifications();
   const [loading, setLoading] = useState(true);
-  const [checkingAccount, setCheckingAccount] = useState(true); // New state
+  const [checkingAccount, setCheckingAccount] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -45,7 +48,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       try {
         const startTime = Date.now();
-
         await Promise.all([getUser(), fetchAccounts()]);
 
         const elapsedTime = Date.now() - startTime;
@@ -66,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (!loading) {
       if (!accounts || accounts.length === 0) {
-        setCheckingAccount(true); // Show loading while redirecting
+        setCheckingAccount(true);
         toast({
           title: "Account Setup Required",
           description: "You need to complete your account creation before accessing the dashboard.",
@@ -82,6 +84,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [accounts, loading]);
 
+  // Sort notifications by date
+  const notifications = [...userNotifications, ...adminNotifications].sort(
+    (a, b) => dayjs(b.date_sent).valueOf() - dayjs(a.date_sent).valueOf()
+  );
+
   // Show loading while fetching user/accounts or checking for accounts
   if (loading || checkingAccount) {
     return <LoadingScreen message="Checking account setup..." />;
@@ -94,16 +101,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       <div className="flex flex-1 flex-col">
-        <DashboardHeader />
+        <DashboardHeader notifications={notifications} />
         <main className="flex-1 p-6">
           <UserProvider>
-            <TransactionsProvider>
-              <SavingsProvider>
-                <LoansProvider>
-                  <InvestmentsProvider>{children}</InvestmentsProvider>
-                </LoansProvider>
-              </SavingsProvider>
-            </TransactionsProvider>
+            <NotificationsProvider>
+              <TransactionsProvider>
+                <SavingsProvider>
+                  <LoansProvider>
+                    <InvestmentsProvider>{children}</InvestmentsProvider>
+                  </LoansProvider>
+                </SavingsProvider>
+              </TransactionsProvider>
+            </NotificationsProvider>
           </UserProvider>
         </main>
       </div>

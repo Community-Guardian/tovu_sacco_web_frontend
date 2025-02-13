@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { useInvestments } from "@/context/InvestmentsContext"
 import { Loader2 } from 'lucide-react'
 import { formatCurrency } from "@/lib/utils"

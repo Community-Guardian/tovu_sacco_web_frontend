@@ -66,7 +66,6 @@ export const GOAL_PROGRESS_URL = `${BASE_URL}/api/goal-progress/`;
 export const MAKE_DEPOSIT_URL = `${BASE_URL}/api/make-deposit/`;
 
 // notifications Urls 
-export const USER_NOTIFICATIONS_URL = `${BASE_URL}/api/user-notifications/`;
-export const ADMIN_NOTIFICATIONS_URL = `${BASE_URL}/api/admin-notifications/`;
-export const MARK_NOTIFICATIONS_READ_URL = `${BASE_URL}/api/mark-notifications-read/`;
-export const MARK_NOTIFICATIONS_UNREAD_URL = `${BASE_URL}/api/mark-notifications-unread/`;
+export const USER_NOTIFICATIONS_URL = `${BASE_URL}/user-notifications/`;
+export const ADMIN_NOTIFICATIONS_URL = `${BASE_URL}/admin-notifications/`;
+

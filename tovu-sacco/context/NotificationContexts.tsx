@@ -5,10 +5,8 @@ import { UserNotification, AdminNotification } from "@/types/notifications";
 import {
   USER_NOTIFICATIONS_URL,
   ADMIN_NOTIFICATIONS_URL,
-  MARK_NOTIFICATIONS_READ_URL,
-  MARK_NOTIFICATIONS_UNREAD_URL,
 } from "@/handler/apiConfig";
-
+import { api } from "@/utils/api";
 interface NotificationsContextProps {
   userNotifications: UserNotification[];
   adminNotifications: AdminNotification[];
@@ -67,7 +65,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   const markAllAsRead = async () => {
     setLoading(true);
     try {
-      await fetch(MARK_NOTIFICATIONS_READ_URL, { method: "POST" });
+      await api.post(`${USER_NOTIFICATIONS_URL}mark_all_as_read/`);
       fetchUserNotifications();
       fetchAdminNotifications();
     } catch (err) {
@@ -80,7 +78,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   const markAsRead = async (id: string) => {
     setLoading(true);
     try {
-      await fetch(`${MARK_NOTIFICATIONS_READ_URL}/${id}`, { method: "POST" });
+      await api.post(`${USER_NOTIFICATIONS_URL}${id}/mark_as_read/`, { method: "POST" });
       fetchUserNotifications();
       fetchAdminNotifications();
     } catch (err) {

@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { useSavings } from "@/context/SavingsContext"
 import { Loader2 } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
@@ -26,7 +26,7 @@ interface MakeDepositDialogProps {
 }
 
 export function MakeDepositDialog({ goal, open, onOpenChange, onSuccess }: MakeDepositDialogProps) {
-  const { makeDeposit, loading } = useSavings()
+  const { makeDeposit, fetchDeposits, loading } = useSavings()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof depositSchema>>({
@@ -45,10 +45,15 @@ export function MakeDepositDialog({ goal, open, onOpenChange, onSuccess }: MakeD
         notes: values.notes,
         date: new Date().toISOString(),
       } as Partial<Deposit>)
-
+      await fetchDeposits();
       form.reset()
       onSuccess?.()
       onOpenChange(false)
+      toast({
+        title: "Sucess",
+        description: "Deposit to savings account sucessfull",
+        variant: "default",
+      })
     } catch (error) {
       toast({
         title: "Error",
