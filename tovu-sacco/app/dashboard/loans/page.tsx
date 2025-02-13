@@ -1,31 +1,78 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LoanApplications } from "./components/loan-applications"
-import { AvailableLoanTypes } from "./components/available-loan-types"
+"use client";
+
+import { useState, useDeferredValue } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoanApplications } from "./components/loan-applications";
+import { AvailableLoanTypes } from "./components/available-loan-types";
+
+import { useToast } from "@/components/ui/use-toast";
 
 export default function LoansPage() {
-  return (
-    <div className="space-y-8">
-      <h2 className="text-3xl font-bold tracking-tight text-green-800">Loans</h2>
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<"applications" | "available">("applications");
+  const deferredTab = useDeferredValue(activeTab); // Smoothens UI responsiveness
+  const [loading, setLoading] = useState(false);
 
-      <Tabs defaultValue="applications" className="space-y-4">
-        <TabsList className="bg-green-100">
-          <TabsTrigger value="applications" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+  const handleTabChange = (tab: "applications" | "available") => {
+    if (activeTab === tab) return; // Avoid unnecessary updates
+    setLoading(true);
+    setActiveTab(tab);
+
+    setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Tab Switched",
+        description: tab === "applications" ? "Viewing your loan applications" : "Browsing available loans",
+      });
+    }, 500);
+  };
+
+  return (
+    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+      <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-primary">Loans</h2>
+
+      <Tabs defaultValue="applications" className="space-y-4 w-full">
+        <TabsList className="bg-muted rounded-lg flex justify-center md:justify-start overflow-auto">
+          <TabsTrigger
+            value="applications"
+            className={`transition-all px-4 py-2 rounded-md whitespace-nowrap ${
+              activeTab === "applications"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "hover:bg-muted-foreground/10"
+            }`}
+            onClick={() => handleTabChange("applications")}
+          >
             My Loans
           </TabsTrigger>
-          <TabsTrigger value="available" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+          <TabsTrigger
+            value="available"
+            className={`transition-all px-4 py-2 rounded-md whitespace-nowrap ${
+              activeTab === "available"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "hover:bg-muted-foreground/10"
+            }`}
+            onClick={() => handleTabChange("available")}
+          >
             Available Loans
           </TabsTrigger>
-        
         </TabsList>
+
         <TabsContent value="applications" className="space-y-4">
-          <LoanApplications />
+          {loading && deferredTab === "applications" ? (
+            <p className="text-center text-muted-foreground animate-pulse">Loading My Loans...</p>
+          ) : (
+            <LoanApplications />
+          )}
         </TabsContent>
+
         <TabsContent value="available">
-          <AvailableLoanTypes />
+          {loading && deferredTab === "available" ? (
+            <p className="text-center text-muted-foreground animate-pulse">Loading Available Loans...</p>
+          ) : (
+            <AvailableLoanTypes />
+          )}
         </TabsContent>
-      
       </Tabs>
     </div>
-  )
+  );
 }
-

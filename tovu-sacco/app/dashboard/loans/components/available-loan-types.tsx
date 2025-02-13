@@ -1,51 +1,80 @@
-"use client"
-import { useState } from "react";
+"use client";
+
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useLoans } from "@/context/LoansContext";
-import { useAuth } from "@/context/AuthContext"; // Assuming you have an Auth Context
+import { useAuth } from "@/context/AuthContext";
 import { LoanApplication } from "@/types/loans";
 import { useAccounts } from "@/context/AccountsContext";
+import { useToast } from "@/components/ui/use-toast";
+
 export function AvailableLoanTypes() {
-  const { loanTypes, fetchLoanTypes, createLoanApplication, loading, error } = useLoans();
-  const { user } = useAuth(); // Assuming user context contains logged-in user details
+  const { loanTypes, createLoanApplication, loading, error } = useLoans();
+  const { user } = useAuth();
+  const { accounts } = useAccounts();
+  const { toast } = useToast();
+
   const [selectedLoan, setSelectedLoan] = useState<number | null>(null);
   const [amountRequested, setAmountRequested] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const {accounts} = useAccounts();
-  const handleApply = (loanTypeId: number) => {
-    setSelectedLoan(loanTypeId);
-  };
 
-  const handleSubmit = async () => {
-    if (!selectedLoan || !amountRequested || !dueDate) return;
+  const handleApply = (loanTypeId: number) => setSelectedLoan(loanTypeId);
+
+  const handleSubmit = useCallback(async () => {
+    const parsedAmount = parseFloat(amountRequested);
+    const selectedAccount = accounts.length > 0 ? accounts[0].account_number : null;
+
+    if (!selectedLoan || isNaN(parsedAmount) || parsedAmount <= 0 || !dueDate || !selectedAccount) {
+      toast({
+        title: "Invalid Input",
+        description: "Please fill in all fields correctly.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const newLoanApplication: Partial<LoanApplication> = {
       loan_type: selectedLoan,
-      amount_requested: amountRequested,
+      amount_requested: parsedAmount,
       date_requested: new Date().toISOString(),
       due_date: dueDate,
-      account: accounts[0].account_number, // Ensure account is fetched from logged-in user
+      account: selectedAccount,
     };
 
-    await createLoanApplication(newLoanApplication);
-    setSelectedLoan(null); // Close form after submission
-  };
+    try {
+      await createLoanApplication(newLoanApplication);
+      toast({
+        title: "Loan Application Submitted",
+        description: `Your request for KES ${parsedAmount.toLocaleString()} has been submitted.`,
+      });
+      setSelectedLoan(null);
+      setAmountRequested("");
+      setDueDate("");
+    } catch (error) {
+      toast({
+        title: "Application Failed",
+        description: "An error occurred while applying for the loan.",
+        variant: "destructive",
+      });
+    }
+  }, [selectedLoan, amountRequested, dueDate, accounts, createLoanApplication, toast]);
 
-  if (loading) return <p>Loading loan types...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
+  if (loading) return <p className="text-primary">Loading loan types...</p>;
+  if (error) return <p className="text-destructive">Error: {error}</p>;
   if (loanTypes.length === 0) return <p>No available loan types.</p>;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {loanTypes.map((loanType) => (
-        <Card key={loanType.id} className="bg-green-50 border-green-200">
+        <Card key={loanType.id} className="bg-muted border-border">
           <CardHeader>
-            <CardTitle className="text-green-800">{loanType.name}</CardTitle>
+            <CardTitle className="text-primary">{loanType.name}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-green-600 mb-4">{loanType.description}</p>
-            <div className="space-y-2 text-green-700">
+            <p className="text-sm text-muted-foreground mb-4">{loanType.description}</p>
+            <div className="space-y-2 text-foreground">
               <p>Interest Rate: <span className="font-semibold">{loanType.interest_rate}%</span></p>
               <p>Amount: <span className="font-semibold">KES {loanType.min_amount} - {loanType.max_amount}</span></p>
               <p>Max Duration: <span className="font-semibold">{loanType.max_duration_months} months</span></p>
@@ -59,7 +88,7 @@ export function AvailableLoanTypes() {
               </div>
             </div>
             <Button 
-              className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white"
+              className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground"
               onClick={() => handleApply(loanType.id)}
             >
               Apply Now
@@ -70,27 +99,31 @@ export function AvailableLoanTypes() {
 
       {/* Loan Application Modal */}
       {selectedLoan && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Apply for Loan</h2>
-            <label className="block mb-2">Amount Requested</label>
-            <input
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="bg-background p-6 rounded-lg shadow-lg max-w-md w-full border border-border">
+            <h2 className="text-xl font-bold mb-4 text-primary">Apply for Loan</h2>
+            <label className="block text-sm font-medium text-foreground mb-2">Amount Requested</label>
+            <Input
               type="number"
               value={amountRequested}
               onChange={(e) => setAmountRequested(e.target.value)}
-              className="w-full p-2 border rounded mb-4"
+              className="mb-4 bg-muted border-border text-foreground"
               placeholder="Enter amount"
             />
-            <label className="block mb-2">Due Date</label>
-            <input
+            <label className="block text-sm font-medium text-foreground mb-2">Due Date</label>
+            <Input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full p-2 border rounded mb-4"
+              className="mb-4 bg-muted border-border text-foreground"
             />
             <div className="flex justify-between">
-              <Button className="bg-gray-500 hover:bg-gray-600 text-white" onClick={() => setSelectedLoan(null)}>Cancel</Button>
-              <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handleSubmit}>Submit</Button>
+              <Button className="bg-muted hover:bg-muted/80 text-foreground" onClick={() => setSelectedLoan(null)}>
+                Cancel
+              </Button>
+              <Button className="bg-primary hover:bg-primary/80 text-primary-foreground" onClick={handleSubmit}>
+                Submit
+              </Button>
             </div>
           </div>
         </div>

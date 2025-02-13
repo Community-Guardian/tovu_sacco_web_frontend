@@ -41,7 +41,7 @@ export default function SavingsPage() {
         <TabsList>
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="goals">Goals</TabsTrigger>
-          <TabsTrigger value="transactions">Transactions</TabsTrigger>
+          {/* <TabsTrigger value="transactions">Transactions</TabsTrigger> */}
         </TabsList>
         <TabsContent value="dashboard">
           <SavingsDashboard />
@@ -49,9 +49,9 @@ export default function SavingsPage() {
         <TabsContent value="goals">
           <GoalsList />
         </TabsContent>
-        <TabsContent value="transactions">
+        {/* <TabsContent value="transactions">
           <TransactionsList />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
 
       <CreateGoalDialog open={showCreateGoal} onOpenChange={setShowCreateGoal} />

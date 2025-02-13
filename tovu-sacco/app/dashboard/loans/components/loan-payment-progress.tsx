@@ -1,42 +1,45 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+"use client";
 
-const loanPayments = [
-  {
-    id: 1,
-    loanId: 1,
-    totalAmount: 45000,
-    paidAmount: 15000,
-    dueDate: "2024-05-20",
-  },
-  // Add more dummy data as needed
-]
+import { useLoans } from "@/context/LoansContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/context/AuthContext";
+import { formatCurrency } from "@/lib/utils";
+import dayjs from "dayjs";
 
 export function LoanPaymentProgress() {
+  const { loanApplications:userLoans, loanRepayments, loading } = useLoans();
+  const { user } = useAuth();
+
+  if (loading) return <p className="text-primary">Loading loan payments...</p>;
+  if (!userLoans.length) return <p>No active loan payments found.</p>;
+
   return (
-    <Card className="bg-green-50 border-green-200">
+    <Card className="bg-muted border-border">
       <CardHeader>
-        <CardTitle className="text-green-800">Loan Payment Progress</CardTitle>
+        <CardTitle className="text-primary">Loan Payment Progress</CardTitle>
       </CardHeader>
-      <CardContent>
-        {loanPayments.map((payment) => (
-          <div key={payment.id} className="space-y-2">
-            <div className="flex justify-between text-green-800">
-              <span>Loan #{payment.loanId}</span>
-              <span>Due: {new Date(payment.dueDate).toLocaleDateString()}</span>
+      <CardContent className="space-y-4">
+        {userLoans.map((loan) => {
+          const repayments = loanRepayments.filter((rep) => rep.loan === loan.id);
+          const totalPaid = repayments.reduce((sum, rep) => sum + rep.amount, 0);
+          const progress = (totalPaid / Number.parseFloat(loan.amount_approved as string)) * 100;
+
+          return (
+            <div key={loan.id} className="space-y-2">
+              <div className="flex justify-between text-foreground">
+                <span>Loan #{loan.id}</span>
+                <span>Due: {dayjs(loan.due_date).format("DD MMM YYYY")}</span>
+              </div>
+              <Progress value={progress} className="bg-muted [&>div]:bg-primary" />
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Paid: {formatCurrency(totalPaid)}</span>
+                <span>Total: {formatCurrency(Number.parseInt(loan.amount_approved as string ))}</span>
+              </div>
             </div>
-            <Progress
-              value={(payment.paidAmount / payment.totalAmount) * 100}
-              className="bg-green-200 [&>div]:bg-green-500"
-            />
-            <div className="flex justify-between text-sm text-green-600">
-              <span>Paid: KES {payment.paidAmount.toFixed(2)}</span>
-              <span>Total: KES {payment.totalAmount.toFixed(2)}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </CardContent>
     </Card>
-  )
+  );
 }
-

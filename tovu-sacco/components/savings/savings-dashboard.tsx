@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AlertCircle, ArrowUpCircle, Bell, CheckCircle2, Clock, Target } from 'lucide-react'
+import { AlertCircle, ArrowUpCircle, Bell, CheckCircle2, Clock, Target } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react"
 
 export function SavingsDashboard() {
   const {
@@ -18,9 +18,11 @@ export function SavingsDashboard() {
     error,
     fetchGoals,
   } = useSavings()
+
   useEffect(() => {
-    fetchGoals();
-  }, []);
+    fetchGoals()
+  }, [])
+
   if (loading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -57,12 +59,16 @@ export function SavingsDashboard() {
   const recentTransactions = transactions.slice(0, 5)
 
   // Get unread notifications
-  const unreadNotifications = notifications.filter(
-    (notification) => !notification.is_read
+  const unreadNotifications = notifications.filter((notification) => !notification.is_read)
+
+  // Filter savings-related notifications
+  const savingsNotifications = notifications.filter((notification) => 
+    !notification.is_read
   )
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Total Savings */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Savings</CardTitle>
@@ -77,6 +83,7 @@ export function SavingsDashboard() {
         </CardContent>
       </Card>
 
+      {/* Active Goals */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Active Goals</CardTitle>
@@ -92,6 +99,7 @@ export function SavingsDashboard() {
         </CardContent>
       </Card>
 
+      {/* Recent Activity */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
@@ -100,15 +108,10 @@ export function SavingsDashboard() {
         <CardContent>
           <div className="space-y-2">
             {recentTransactions.map((transaction) => (
-              <div
-                key={transaction.id}
-                className="flex items-center justify-between text-sm"
-              >
+              <div key={transaction.id} className="flex items-center justify-between text-sm">
                 <div className="flex items-center space-x-2">
                   <ArrowUpCircle className="h-4 w-4 text-green-500" />
-                  <span>
-                    {formatCurrency(Number(transaction.amount || 0))}
-                  </span>
+                  <span>{formatCurrency(Number(transaction.amount || 0))}</span>
                 </div>
                 <span className="text-muted-foreground">
                   {transaction.date ? new Date(transaction.date).toLocaleDateString() : "N/A"}
@@ -119,21 +122,34 @@ export function SavingsDashboard() {
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Savings Notifications */}
+      {/* <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Notifications</CardTitle>
+          <CardTitle className="text-sm font-medium">Savings Notifications</CardTitle>
           <Bell className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{unreadNotifications.length}</div>
-          <p className="text-xs text-muted-foreground">Unread notifications</p>
-          {unreadNotifications.length > 0 && (
+          <div className="text-2xl font-bold">{savingsNotifications.length}</div>
+          <p className="text-xs text-muted-foreground">Unread savings alerts</p>
+          {savingsNotifications.length > 0 ? (
+            <ul className="mt-2 space-y-1 text-sm">
+              {savingsNotifications.slice(0, 3).map((notification) => (
+                <li key={notification.id} className="text-muted-foreground">
+                  {notification.message}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">No new savings notifications</p>
+          )}
+          {savingsNotifications.length > 3 && (
             <Button variant="link" className="mt-2 h-auto p-0">
               View all
             </Button>
           )}
         </CardContent>
-      </Card>
+      </Card> */}
+
     </div>
   )
 }

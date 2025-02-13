@@ -21,8 +21,8 @@ export interface LoanRequirement {
   export interface LoanApplication {
     id: number;
     loan_type: number;
-    amount_requested: string;
-    amount_approved: string | null;
+    amount_requested: string| number;
+    amount_approved: string| number ;
     interest_rate: string;
     date_requested: string; // ISO 8601 format
     date_approved: string | null; // ISO 8601 format or null

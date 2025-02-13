@@ -33,9 +33,9 @@ interface LoansContextProps {
   updateLoanType: (id: number, data: Partial<LoanType>) => void;
   deleteLoanType: (id: number) => void;
   createLoanApplication: (data: Partial<LoanApplication>) => void;
-  updateLoanApplication: (id: number, data: Partial<LoanApplication>) => void;
+  updateLoanApplication: (id: number, data: Partial<LoanApplication>) => Promise<void>;
   deleteLoanApplication: (id: number) => void;
-  createLoanRepayment: (data: Partial<LoanRepayment>) => void;
+  createLoanRepayment: (data: Partial<LoanRepayment>) => Promise<void>;
   updateLoanRepayment: (id: number, data: Partial<LoanRepayment>) => void;
   deleteLoanRepayment: (id: number) => void;
   currentPage: number;
