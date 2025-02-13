@@ -12,11 +12,9 @@ export default function AuthLayout({
 }) {
   return (
     <>
-      <SiteHeader />
-      <main className="flex-1 relative flex min-h-screen flex-col">
+      <main className="flex-1 relative flex min-h-screen flex-col bg-white">
         {children}
       </main>
-      <SiteFooter />
     </>
   );
 }

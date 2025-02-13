@@ -3,15 +3,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { useAccounts } from "@/context/AccountsContext";
 import { NextOfKin } from "@/types/accounts";
+import { motion } from "framer-motion";
+import { X } from "lucide-react";
 
 export default function MembershipPage() {
   const router = useRouter();
   const { createKYC, createNextOfKin, loading } = useAccounts();
+  const { toast } =  useToast();
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -108,81 +111,141 @@ export default function MembershipPage() {
           contact_number: kin.contact_number,
         });
       }
-
-      toast.success("Membership registered successfully!");
+      toast({
+        title: "Success",
+        description: "Membership registered successfully!",
+        variant: "default",
+      });
       router.replace("/dashboard");
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
+    } catch (error:any) {
+      if (error.non_field_errors){
+        toast({
+          title: "Error",
+          description: error.non_field_errors[0],
+          variant: "destructive",
+        });
+      }
+      else if (error.kra_pin){
+        toast({
+          title: "Error",
+          description: error.kra_pin,
+          variant: "destructive",
+        });
+      }
+      else if (error.contact_number){
+        toast({
+          title: "Error",
+          description: error.contact_number,
+          variant: "destructive",
+        });
+      }
+      else if (error.id_number){
+        toast({
+          title: "Error",
+          description: error.id_number,
+          variant: "destructive",
+        });
+      }
+      else{
+        toast({
+        title: "An error occurred",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+      }
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-4 p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Membership Registration</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {step === 1 && (
-          <>
-            <h3 className="text-lg font-semibold">Personal Details</h3>
-            <Input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-            <Input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-            <Select onValueChange={(value) => setFormData({ ...formData, gender: value })} required>
-              <SelectTrigger><SelectValue placeholder="Gender" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select onValueChange={(value) => setFormData({ ...formData, maritalStatus: value })} required>
-              <SelectTrigger><SelectValue placeholder="Marital Status" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="single">Single</SelectItem>
-                <SelectItem value="married">Married</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input name="dateOfBirth" type="date" placeholder="Date of Birth" value={formData.dateOfBirth} onChange={handleChange} required />
-          </>
-        )}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+      <Card className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6 space-y-6 relative">
+        {/* Close Button */}
+        <button 
+          onClick={() => router.push("/")} 
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+        >
+          <X size={24} />
+        </button>
+        <CardHeader>
+          <CardTitle className="text-center">Membership Registration</CardTitle>
+        </CardHeader>
+          <form onSubmit={handleSubmit} className="max-h-[65vh] overflow-y-auto p-2 space-y-6">
+            {/* Step 1: Personal Details */}
+            {step === 1 && (
+              <>
+                <h3 className="text-lg font-semibold text-gray-700">Personal Details</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <Input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
+                  <Input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
+                </div>
+                <Select onValueChange={(value) => setFormData({ ...formData, gender: value })} required>
+                  <SelectTrigger><SelectValue placeholder="Gender" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select onValueChange={(value) => setFormData({ ...formData, maritalStatus: value })} required>
+                  <SelectTrigger><SelectValue placeholder="Marital Status" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="single">Single</SelectItem>
+                    <SelectItem value="married">Married</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input name="dateOfBirth" type="date" placeholder="Date of Birth" value={formData.dateOfBirth} onChange={handleChange} required />
+              </>
+            )}
 
-        {step === 2 && (
-          <>
-            <h3 className="text-lg font-semibold">Identification & Contact</h3>
-            <Select onValueChange={(value) => setFormData({ ...formData, identityType: value })} required>
-              <SelectTrigger><SelectValue placeholder="Identity Type" /></SelectTrigger>
-              <SelectContent>
-              <SelectItem value="national_id_card">National ID Card</SelectItem>
-              <SelectItem value="drivers_licence">Drives Licence</SelectItem>
-              <SelectItem value="international_passport">International Passport</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input name="idNumber" placeholder="ID Number" value={formData.idNumber} onChange={handleChange} required />
-            <Input name="kraPin" placeholder="KRA Pin" value={formData.kraPin} onChange={handleChange} required />
-            <Input name="phone" type="tel" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
-          </>
-        )}
+            {/* Step 2: Identification & Contact */}
+            {step === 2 && (
+              <>
+                <h3 className="text-lg font-semibold text-gray-700">Identification & Contact</h3>
+                <Select onValueChange={(value) => setFormData({ ...formData, identityType: value })} required>
+                  <SelectTrigger><SelectValue placeholder="Identity Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="national_id_card">National ID Card</SelectItem>
+                    <SelectItem value="drivers_licence">Driver's License</SelectItem>
+                    <SelectItem value="international_passport">International Passport</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input name="idNumber" placeholder="ID Number" value={formData.idNumber} onChange={handleChange} required />
+                <Input name="kraPin" placeholder="KRA Pin" value={formData.kraPin} onChange={handleChange} required />
+                <Input name="phone" type="tel" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
+              </>
+            )}
 
-        {step === 3 && (
-          <>
-            <h3 className="text-lg font-semibold">Next of Kin</h3>
-            {nextOfKins.map((kin, index) => (
-              <div key={kin.id} className="space-y-2 border p-4 rounded-lg">
-                <Input placeholder="Full Name" value={kin.name} onChange={(e) => updateNextOfKin(index, "name", e.target.value)} required />
-                <Input placeholder="Relationship" value={kin.relationship} onChange={(e) => updateNextOfKin(index, "relationship", e.target.value)} required />
-                <Input placeholder="Contact Number" type="tel" value={kin.contact_number} onChange={(e) => updateNextOfKin(index, "contact_number", e.target.value)} required />
-                <Button type="button" variant="destructive" onClick={() => removeNextOfKin(index)}>Remove</Button>
-              </div>
-            ))}
-            <Button type="button" onClick={addNextOfKin}>Add Next of Kin</Button>
-            <Button type="submit" disabled={loading}>{loading ? "Submitting..." : "Submit"}</Button>
-          </>
-        )}
+            {/* Step 3: Next of Kin */}
+            {step === 3 && (
+              <>
+                <h3 className="text-lg font-semibold text-gray-700">Next of Kin</h3>
+                {nextOfKins.map((kin, index) => (
+                  <div key={kin.id} className="space-y-2 border border-gray-200 p-4 rounded-lg">
+                    <Input placeholder="Full Name" value={kin.name} onChange={(e) => updateNextOfKin(index, "name", e.target.value)} required />
+                    <Input placeholder="Relationship" value={kin.relationship} onChange={(e) => updateNextOfKin(index, "relationship", e.target.value)} required />
+                    <Input placeholder="Contact Number" type="tel" value={kin.contact_number} onChange={(e) => updateNextOfKin(index, "contact_number", e.target.value)} required />
+                    <Button type="button" variant="destructive" onClick={() => removeNextOfKin(index)}>Remove</Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addNextOfKin}>Add Next of Kin</Button>
+                <Button type="submit" className="w-full" disabled={loading}>{loading ? "Submitting..." : "Submit"}</Button>
+              </>
+            )}
 
-        <div className="flex justify-between">
-          {step > 1 && <Button onClick={() => setStep(step - 1)}>Back</Button>}
-          {step < 3 && <Button onClick={handleNext}>Next</Button>}
-        </div>
-      </form>
+            {/* Navigation Buttons */}
+            <div className="flex justify-between pt-4">
+            {step > 1 && <Button onClick={() => setStep(step - 1)}>Back</Button>}
+            {step < 3 && <Button onClick={handleNext}>Next</Button>}
+            </div>
+          </form>
+        </Card>
+      </motion.div>
     </div>
   );
 }

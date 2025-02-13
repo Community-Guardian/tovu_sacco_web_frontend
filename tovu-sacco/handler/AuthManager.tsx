@@ -2,7 +2,7 @@ import { LOGIN_URL, BASE_URL, REGISTER_URL, REFRESH_TOKEN_URL, USER_URL, LOGOUT_
 import { api, handleApiError } from '@/utils/api';
 import axios, { AxiosError, AxiosResponse, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { User } from '@/types';
-// import Cookies from 'js-cookie'; // Import js-cookie
+import Cookies from 'js-cookie'; // Import js-cookie
 
 export interface AuthResponse {
   access: string;
@@ -23,14 +23,14 @@ class AuthManager {
   async login(email: string, password: string): Promise<AuthResponse | undefined> {
     try {
         // Clear tokens synchronously before making the API call
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
 
         const response = await apiPlain.post<AuthResponse>(LOGIN_URL, { email, password });
 
         // Store new tokens after successful login in cookies
-        localStorage.setItem('accessToken', response.data.access); // 1 day expiration
-        localStorage.setItem('refreshToken', response.data.refresh); // 7 days expiration
+        Cookies.set('accessToken', response.data.access, { expires: 1 }); // 1 day expiration
+        Cookies.set('refreshToken', response.data.refresh, { expires: 7 }); // 7 days expiration
 
         return response.data;
     } catch (error) {
@@ -43,8 +43,8 @@ class AuthManager {
       const response = await apiPlain.post<AuthResponse>(REGISTER_URL, { email, password1, password2, role });
       
       // Store new tokens after successful registration in cookies
-       localStorage.setItem('accessToken', response.data.access); // 1 day expiration
-       localStorage.setItem('refreshToken', response.data.refresh); // 7 days expiration
+      Cookies.set('accessToken', response.data.access, { expires: 1 }); // 1 day expiration
+      Cookies.set('refreshToken', response.data.refresh, { expires: 7 }); // 7 days expiration
       
       return response.data;
     } catch (error) {
@@ -54,12 +54,12 @@ class AuthManager {
 
   async refreshToken(): Promise<AuthResponse | undefined> {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = Cookies.get('refreshToken');
       if (!refreshToken) throw new Error('No refresh token found');
       const response = await apiPlain.post<AuthResponse>(REFRESH_TOKEN_URL, { refresh: refreshToken });
       
       // Store the new access token in cookies
-      localStorage.setItem('accessToken', response.data.access);
+      Cookies.set('accessToken', response.data.access, { expires: 1 });
       return response.data;
     } catch (error) {
       handleApiError(error as AxiosError<ApiErrorResponse>);
@@ -68,7 +68,7 @@ class AuthManager {
 
   async logout(): Promise<void> {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = Cookies.get('refreshToken');
       if (refreshToken) {
         await api.post(LOGOUT_URL, { refresh: refreshToken });
       }
@@ -76,8 +76,8 @@ class AuthManager {
       handleApiError(error as AxiosError<ApiErrorResponse>);
     } finally {
       // Remove tokens from cookies
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      Cookies.remove('accessToken');
+      Cookies.remove('refreshToken');
     }
   }
 

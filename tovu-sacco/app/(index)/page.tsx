@@ -14,7 +14,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden  pt-4 lg:pt-8 m-auto ">
         <div className="container relative px-4 md:px-8">
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid gap-8 lg:grid-cols-2 ">
             <div className="flex flex-col justify-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 EMPOWER YOUR{" "}
@@ -250,7 +250,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 bg-green-50 text-black px-4 md:px-8 m-auto">
+      <section className="py-24 bg-gradient-to-r from-primary to-primary-dark px-4 md:px-8 m-auto">
         <div className="container">
           <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
@@ -274,7 +274,7 @@ export default function Home() {
       </section>
 
       {/* App Download Section */}
-      <section className="py-24 bg-gradient-to-b from-background to-primary/5 px-4 md:px-8">
+      <section className="w-full  py-24 bg-gradient-to-b from-background to-primary/5 px-4 md:px-8 m-auto">
         <div className="container">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
             <div className="flex flex-col gap-6">
@@ -319,7 +319,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8">
+      <section className="relative overflow-hidden bg-muted/50 py-16 w-full px-4 md:px-8 m-auto">
         <div className="container relative z-10 m-auto">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="mb-4 text-3xl font-bold">Unlock more with Tovu SACCO!</h2>

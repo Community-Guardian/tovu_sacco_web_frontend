@@ -4,19 +4,17 @@ import authManager from '@/handler/AuthManager'; // Path to AuthManager
 import { AxiosError } from 'axios';
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface AuthContextType {
   user: User | null; // Replace with your user type
-  accessToken: string | null;
-  refresh_Token: string | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password1: string, password2: string, role: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
+  register: (email: string, password1: string, password2: string, role: string) => Promise<User>;
   logout: () => Promise<void>;
-  refreshToken: () => Promise<void>;
   changePassword: (newPassword1: string, newPassword2: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   getUser: () => Promise<void>;
@@ -26,16 +24,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null); // Store user information
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refresh_Token, setRefreshToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Start in a loading state
+  const [loading, setLoading] = useState<boolean>(true); // Start in a loading state
   const [error, setError] = useState<string | null>(null);
   // Innocent until proven guilty LOL
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     // Check for the accessToken in cookies only on the client-side
-    const token = localStorage.getItem('accessToken');
+    const token = Cookies.get('accessToken');
     setIsAuthenticated(!!token);  // Set state based on whether the token exists
   }, []);  
   const router = useRouter();
@@ -44,32 +40,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUserOnLoad = async () => {
       try {
-        // Fetch user data
-        if(localStorage.getItem('accessToken')) { // Check if accessToken exists
-        const userData = await authManager.getUser();
-        setUser(userData[0]);
-        setIsAuthenticated(true);
-        }
+        if(Cookies.get('accessToken')) {
+          // Fetch user data
+          await getUser();
+          setIsAuthenticated(true);
+        }    
       } catch (err) {
         console.error('Failed to fetch user on load:', err);
         setError('Failed to authenticate. Please log in again.');
         setUser(null);
         setIsAuthenticated(false);
-        setAccessToken(null);
-        setRefreshToken(null);
       } finally {
         setLoading(false); // End the loading state
       }
     };
-    if (localStorage.getItem('accessToken')) { // Check if accessToken exists
     fetchUserOnLoad();
-    }
   }, []);
   // create redirect function
   function redirect(userType: string) {
-    if(isAuthenticated) { // Redirect based on user type
+    if(Cookies.get('accessToken')) { // Redirect based on user type
       if (userType === "customer") {
         router.push("/dashboard")
+      } else if (userType === "admin") {
+        router.push("/")
       } else {
         router.push("/login")
       }
@@ -80,16 +73,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const data = await authManager.login(email, password);
-      if (data) {
-        setIsAuthenticated(true); // Set to authenticated after successful login
-        setAccessToken(data.access);
-        setRefreshToken(data.refresh);
-        const userData = await authManager.getUser();
-        setUser(userData[0]);
-        if (Array.isArray(userData)) {
-          await redirect(userData[0]?.role);
-         }
-      }
+      setIsAuthenticated(true); // Set to authenticated after successful login
+      const userData = await authManager.getUser();
+      setUser(userData.results[0]);
+      return userData.results[0]
+
     } catch (err: any) {
       setError(err.email || err.password || 'Wrong username or password. Please try again.');
       throw err;
@@ -102,16 +90,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string, password1: string, password2: string, role: string) => {
     setLoading(true);
     try {
-      const data = await authManager.register(email, password1, password2, role);
-      console.log(data);
-      
-      if (data) {
-        setIsAuthenticated(true);
-        setAccessToken(data.access);
-        setRefreshToken(data.refresh);
-        const userData = await authManager.getUser();
-        setUser(userData[0]);
-      }
+      const data = await authManager.register(email, password1, password2, role);    
+      setIsAuthenticated(true); // Set to authenticated after successful login
+      const userData = await authManager.getUser();
+      setUser(userData.results[0]);
+      return userData.results[0]
     } catch (err: any) {
       setError(err.email || 'Registration failed');
       throw err;
@@ -126,27 +109,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await authManager.logout();
       setUser(null);
-      setAccessToken(null);
-      setRefreshToken(null);
+      Cookies.remove('accessToken');
+      Cookies.remove('refreshToken');
       setIsAuthenticated(false); // Set to false on logout
     } catch (err) {
       setError((err as AxiosError).message || 'Logout failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle token refresh
-  const refreshToken = async () => {
-    setLoading(true);
-    try {
-      const data = await authManager.refreshToken();
-      if (data) {
-        setAccessToken(data.access);
-        setRefreshToken(data.refresh);
-      }
-    } catch (err) {
-      setError((err as AxiosError).message || 'Token refresh failed');
     } finally {
       setLoading(false);
     }
@@ -181,14 +148,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
         // Fetch user data
         const userData = await authManager.getUser();
-        setUser(userData[0]);
+        setUser(userData.results[0]);
     } catch (err) {
       console.error('Failed to fetch user on load:', err);
       setError('Failed to authenticate. Please log in again.');
       setUser(null);
       setIsAuthenticated(false);
-      setAccessToken(null);
-      setRefreshToken(null);
     } finally {
       setLoading(false); // End the loading state
     }
@@ -198,8 +163,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        accessToken,
-        refresh_Token,
         loading,
         error,
         isAuthenticated,
@@ -207,7 +170,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         register,
         logout,
-        refreshToken,
         changePassword,
         resetPassword,
         getUser,

@@ -32,7 +32,7 @@ function useApi<T>(url: string) {
     return queryParams.toString() ? `?${queryParams.toString()}` : '';
   };
 
-  const fetchData = async (filters?: Record<string, string | number>) => {
+  const fetchData = async (filters?: Record<string, string | number | undefined>) => {
     setLoading(true);
     setError(null);
     try {
@@ -42,12 +42,13 @@ function useApi<T>(url: string) {
         page_size: pageSize,
       });
 
-      const response = await api.get<any>(`${url}${queryString}`);
-      setData(response.data);
+      const response = await api.get<ApiResponse<T>>(`${url}${queryString}`);
+      setData(response.data.results);
       setTotalPages(Math.ceil(response.data.count / pageSize));
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
       setError('Failed to fetch data');
+      throw err
     } finally {
       setLoading(false);
     }
@@ -62,6 +63,7 @@ function useApi<T>(url: string) {
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
       setError('Failed to fetch item');
+      throw err
     } finally {
       setLoading(false);
     }
@@ -76,6 +78,7 @@ function useApi<T>(url: string) {
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
       setError('Failed to add item');
+      throw err
     } finally {
       setLoading(false);
     }
@@ -90,6 +93,7 @@ function useApi<T>(url: string) {
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
       setError('Failed to update item');
+      throw err
     } finally {
       setLoading(false);
     }
@@ -104,6 +108,7 @@ function useApi<T>(url: string) {
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
       setError('Failed to delete item');
+      throw err
     } finally {
       setLoading(false);
     }
