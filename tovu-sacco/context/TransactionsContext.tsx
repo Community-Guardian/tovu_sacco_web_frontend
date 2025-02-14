@@ -1,6 +1,8 @@
 "use client"
 import { createContext, useContext, ReactNode, useEffect } from 'react';
 import useApi from '@/hooks/useApi';
+import { api , handleApiError } from '@/utils/api';
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import {
   BaseTransaction,
   TransferTransaction,
@@ -26,6 +28,11 @@ import {
   AUDIT_TRANSACTION_URL,
   TRANSACTION_STATUS_URL,
 } from '@/handler/apiConfig';
+interface ApiErrorResponse {
+  detail?: string;
+  [key: string]: unknown;
+}
+type TransactionType = "deposit" | "withdraw" | "loan" | "investment" | "savings" | "minimumShares";
 
 interface TransactionsContextProps {
   transfers: TransferTransaction[];
@@ -51,6 +58,16 @@ interface TransactionsContextProps {
   createTransaction: (url: string, data: Partial<BaseTransaction>) => void;
   updateTransaction: (url: string, id: number, data: Partial<BaseTransaction>) => void;
   deleteTransaction: (url: string, id: number) => void;
+  initiateDepositPayment: (data: { payment_method: string; phone_number: string; amount: number; description: string; account_id: string ,transaction_type: string}) => Promise<string|undefined>;
+  initiateWithdrawal: (data: { payment_method: string; phone_number: string; amount: number; description: string; account_id: string ,transaction_type: string }) => Promise<void>;
+  initiateMinimumSharesDepositPayment: (data: { payment_method: string; phone_number: string; amount: number; description: string; account_id: string }) => Promise<void>;
+  depositToSavings: (data: { goal_id: number; amount: number; description: string; account_id: string }) => Promise<string|undefined>;
+  withdrawFromSavings: (data: { goal_id: number; amount: number; description: string; account_id: string }) => Promise<void>;
+  payLoan: (data: { payment_method: string; phone_number: string; amount: number; description: string; loan_id: string; account_id?: string }) => Promise<string|undefined>;
+  depositToInvestment: (data: { investment_id: number; amount: number; description: string; account_id: string }) => Promise<void>;
+  withdrawFromInvestment: (data: { investment_id: number; amount: number; description: string; account_id: string }) => Promise<void>;
+  fetchTransactionByType: (url: string,transactionType: TransactionType) => Promise< Partial<BaseTransaction>[]|undefined>;
+
   currentPage: number;
   totalPages: number;
   nextPage: () => void;
@@ -218,21 +235,163 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
         throw new Error("Invalid transaction type");
     }
   };
-
-  // useEffect(() => {
-  //   if (localStorage.getItem('accessToken')) { // Check if accessToken exists
-  //   fetchTransfers();
-  //   fetchWithdrawals();
-  //   fetchRefunds();
-  //   fetchDeposits();
-  //   fetchLoans();
-  //   fetchInvestments();
-  //   fetchSavings();
-  //   fetchMinimumSharesDeposits();
-  //   fetchAudits();
-  //   }
-  // }, [currentPage]);
-
+  const fetchTransactionByType = async (transactionId: string, transactionType: TransactionType) => {
+    let url = "";
+    
+    switch (transactionType) {
+      case "deposit":
+        url = `${DEPOSIT_URL}/?transaction_id=${transactionId}`;
+        break;
+      case "withdraw":
+        url = `${WITHDRAWAL_URL}/?transaction_id=${transactionId}`;
+        break;
+      case "loan":
+        url = `${LOAN_TRANSACTION_URL}/?transaction_id=${transactionId}`;
+        break;
+      case "investment":
+        url = `${INVESTMENT_TRANSACTION_URL}/?transaction_id=${transactionId}`;
+        break;
+      case "savings":
+        url = `${SAVING_TRANSACTION_URL}/?transaction_id=${transactionId}`;
+        break;
+      case "minimumShares":
+        url = `${MINIMUM_SHARES_DEPOSIT_URL}/?transaction_id=${transactionId}`;
+        break;
+      default:
+        throw new Error(`Unknown transaction type: ${transactionType}`);
+    }
+  
+    try {
+      const response = await api.get(url);
+      return response.data.results;
+    } catch (error) {
+      console.error("Error fetching transaction details:", error);
+      return null;
+    }
+  };
+  
+  const initiateDepositPayment = async (data: {
+    payment_method: string;
+    phone_number: string;
+    amount: number;
+    description: string;
+    account_id: string;
+    transaction_type: string;
+  }): Promise<string | undefined> => {
+    try {
+      const response = await api.post(`${DEPOSIT_URL}initiate_payment/`, data);
+      return response.data.transaction_id;
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const initiateWithdrawal = async (data: {
+    payment_method: string;
+    phone_number: string;
+    amount: number;
+    description: string;
+    account_id: string;
+    transaction_type: string;
+  }): Promise<void> => {
+    try {
+      await api.post(`${WITHDRAWAL_URL}initiate/`, data);
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const initiateMinimumSharesDepositPayment = async (data: {
+    payment_method: string;
+    phone_number: string;
+    amount: number;
+    description: string;
+    account_id: string;
+  }): Promise<void> => {
+    try {
+      await api.post(`${MINIMUM_SHARES_DEPOSIT_URL}initiate_payment/`, data);
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const depositToSavings = async (data: {
+    goal_id: number;
+    amount: number;
+    description: string;
+    account_id: string;
+  }): Promise<string | undefined> => {
+    try {
+      const response = await api.post<string>(`${SAVING_TRANSACTION_URL}deposit/`, data);
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const withdrawFromSavings = async (data: {
+    goal_id: number;
+    amount: number;
+    description: string;
+    account_id: string;
+  }): Promise<void> => {
+    try {
+      await api.post(`${SAVING_TRANSACTION_URL}withdraw/`, data);
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const payLoan = async (data: {
+    payment_method: string;
+    phone_number: string;
+    amount: number;
+    description: string;
+    loan_id: string;
+    account_id?: string;
+  }): Promise<string | undefined> => {
+    try {
+      const response = await api.post<string>(`${LOAN_TRANSACTION_URL}repay/`, data);
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const depositToInvestment = async (data: {
+    investment_id: number;
+    amount: number;
+    description: string;
+    account_id: string;
+  }): Promise<void> => {
+    try {
+      await api.post(`${INVESTMENT_TRANSACTION_URL}deposit/`, data);
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
+  const withdrawFromInvestment = async (data: {
+    investment_id: number;
+    amount: number;
+    description: string;
+    account_id: string;
+  }): Promise<void> => {
+    try {
+      await api.post(`${INVESTMENT_TRANSACTION_URL}withdraw/`, data);
+    } catch (error) {
+      handleApiError(error as AxiosError<ApiErrorResponse>);
+      throw error;
+    }
+  };
+  
   return (
     <TransactionsContext.Provider
       value={{
@@ -259,6 +418,15 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
         createTransaction,
         updateTransaction,
         deleteTransaction,
+        initiateDepositPayment,
+        initiateWithdrawal,
+        initiateMinimumSharesDepositPayment,
+        depositToSavings,
+        withdrawFromSavings,
+        payLoan,
+        depositToInvestment,
+        withdrawFromInvestment,
+        fetchTransactionByType,
         currentPage,
         totalPages,
         nextPage,

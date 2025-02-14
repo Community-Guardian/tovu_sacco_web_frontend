@@ -17,6 +17,7 @@ import { UserProvider } from "@/context/userContext";
 import { NotificationsProvider, useNotifications } from "@/context/NotificationContexts";
 import { User } from "@/types";
 import dayjs from "dayjs";
+import { TransactionProvider } from "@/context/TransactionsProvider";
 
 // 🔹 Loading Component
 function LoadingScreen({ message }: { message: string }) {
@@ -108,7 +109,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <TransactionsProvider>
                 <SavingsProvider>
                   <LoansProvider>
-                    <InvestmentsProvider>{children}</InvestmentsProvider>
+                    <TransactionProvider>
+                      <InvestmentsProvider>{children}</InvestmentsProvider>
+                    </TransactionProvider>
                   </LoansProvider>
                 </SavingsProvider>
               </TransactionsProvider>
