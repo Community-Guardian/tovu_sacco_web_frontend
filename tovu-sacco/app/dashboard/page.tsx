@@ -3,6 +3,8 @@ import { useAccounts } from "@/context/AccountsContext";
 import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+
 import { LoanApplication } from "@/types/loans";
 import { Investment } from "@/types/investments";
 import { Goal } from "@/types/savings";
@@ -11,6 +13,7 @@ import { formatCurrency, formatDate } from "@/utils/formatters";
 import { useInvestments } from "@/context/InvestmentsContext";
 import { useSavings } from "@/context/SavingsContext";
 import { useTransactions } from "@/context/TransactionsContext";
+import DepositModal from "@/components/DepositModal";
 
 export default function DashboardPage() {
   const {
@@ -30,10 +33,14 @@ export default function DashboardPage() {
   const kyc = kycRecords?.[0];
   const activeLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Approved") || [];
   const pendingLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Pending") || [];
+  const [isDepositOpen, setDepositOpen] = useState(false);
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold">Dashboard</h1>
+      <Button onClick={() => setDepositOpen(true)} className="bg-blue-600 text-white">
+          Deposit
+        </Button>
       <Separator className="my-4" />
 
       {/* Account Summary */}
@@ -175,6 +182,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+       {/* Deposit Modal */}
+       {isDepositOpen && <DepositModal isOpen={isDepositOpen} onClose={() => setDepositOpen(false)} />}
     </div>
   );
 }
