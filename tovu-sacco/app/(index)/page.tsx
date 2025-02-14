@@ -254,19 +254,19 @@ export default function Home() {
     <div className="container">
         <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
-                <AnimatedStat end={1000} duration={2000} suffix="+" textColor="black" />
+                <AnimatedStat end={1000} duration={2000} suffix="+" />
                 <p className="text-blue-100">Members supported</p>
             </div>
             <div className="space-y-2">
-                <AnimatedStat end={5000000} duration={2000} suffix="+" textColor="black" />
+                <AnimatedStat end={5000000} duration={2000} suffix="+" />
                 <p className="text-blue-100">Loans disbursed</p>
             </div>
             <div className="space-y-2">
-                <AnimatedStat end={10} duration={2000} textColor="black" />
+                <AnimatedStat end={10} duration={2000} />
                 <p className="text-blue-100">Presence in Major towns across Kenya</p>
             </div>
             <div className="space-y-2">
-                <AnimatedStat end={2} duration={2000} textColor="black" />
+                <AnimatedStat end={2} duration={2000}  />
                 <p className="text-blue-100">Years of service</p>
             </div>
         </div>
