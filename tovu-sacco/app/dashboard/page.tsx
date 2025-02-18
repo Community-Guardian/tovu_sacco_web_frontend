@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+
 import { useAccounts } from "@/context/AccountsContext";
 import { useEffect,useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import { LoanApplication } from "@/types/loans";
 import { useLoans } from "@/context/LoansContext";
@@ -14,6 +15,7 @@ import { useSavings } from "@/context/SavingsContext";
 import {
   DepositButton,
 } from "@/components/payments/TransactionButtons"; // Import buttons
+import DepositModal from "@/components/DepositModal";
 export default function DashboardPage() {
   const { accounts, kycRecords } = useAccounts();
   const { loanApplications } = useLoans();
