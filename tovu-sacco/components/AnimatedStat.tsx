@@ -35,7 +35,7 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({ end, duration, suffi
   }, [end, duration])
 
   return (
-    <h3 className="text-4xl font-bold text-green-800">
+    <h3 className="text-4xl font-bold text-black-800">
       {count}
       {suffix}
     </h3>

@@ -249,30 +249,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-24 bg-gradient-to-r from-primary to-primary-dark px-4 md:px-8 m-auto">
-        <div className="container">
-          <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
+     {/* Stats Section */}
+<section className="py-24 bg-gradient-to-r from-blue-500 to-blue-700 px-4 md:px-8 m-auto">
+    <div className="container">
+        <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
-              <AnimatedStat end={1000} duration={2000} suffix="+" />
-              <p className="text-green-700">Members supported</p>
+                <AnimatedStat end={1000} duration={2000} suffix="+" />
+                <p className="text-blue-100">Members supported</p>
             </div>
             <div className="space-y-2">
-              <AnimatedStat end={5000000} duration={2000} suffix="+" />
-              <p className="text-green-700">Loans disbursed</p>
+                <AnimatedStat end={5000000} duration={2000} suffix="+" />
+                <p className="text-blue-100">Loans disbursed</p>
             </div>
             <div className="space-y-2">
-              <AnimatedStat end={10} duration={2000} />
-              <p className="text-green-700">Presence in Major towns across Kenya</p>
+                <AnimatedStat end={10} duration={2000} />
+                <p className="text-blue-100">Presence in Major towns across Kenya</p>
             </div>
             <div className="space-y-2">
-              <AnimatedStat end={2} duration={2000} />
-              <p className="text-green-700">Years of service</p>
+                <AnimatedStat end={2} duration={2000}  />
+                <p className="text-blue-100">Years of service</p>
             </div>
-          </div>
         </div>
-      </section>
-
+    </div>
+</section>
       {/* App Download Section */}
       <section className="w-full  py-24 bg-gradient-to-b from-background to-primary/5 px-4 md:px-8 m-auto">
         <div className="container">

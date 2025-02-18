@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useAccounts } from "@/context/AccountsContext";
+import { useEffect,useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
 import { LoanApplication } from "@/types/loans";
 import { useLoans } from "@/context/LoansContext";
 import { formatCurrency, formatDate } from "@/utils/formatters";
@@ -25,9 +26,11 @@ export default function DashboardPage() {
 
   const activeLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Approved") || [];
   const pendingLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Pending") || [];
+  const [isDepositOpen, setDepositOpen] = useState(false);
 
   return (
     <div className="p-6">
+
       <div className="w-full flex flex-row justify-between" >
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <DepositButton accountId={account.account_number} />
@@ -199,6 +202,8 @@ export default function DashboardPage() {
           </DialogContent>
         </Dialog>
       </div>
+       {/* Deposit Modal */}
+       {isDepositOpen && <DepositModal isOpen={isDepositOpen} onClose={() => setDepositOpen(false)} />}
     </div>
   );
 }
