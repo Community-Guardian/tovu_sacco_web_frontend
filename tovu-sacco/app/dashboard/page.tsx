@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useAccounts } from "@/context/AccountsContext";
 import { useEffect,useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,24 +7,15 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
 import { LoanApplication } from "@/types/loans";
-import { Investment } from "@/types/investments";
-import { Goal } from "@/types/savings";
 import { useLoans } from "@/context/LoansContext";
 import { formatCurrency, formatDate } from "@/utils/formatters";
 import { useInvestments } from "@/context/InvestmentsContext";
 import { useSavings } from "@/context/SavingsContext";
-import { useTransactions } from "@/context/TransactionsContext";
-import DepositModal from "@/components/DepositModal";
-
+import {
+  DepositButton,
+} from "@/components/payments/TransactionButtons"; // Import buttons
 export default function DashboardPage() {
-  const {
-    accounts,
-    kycRecords,
-    nextOfKins,
-    fetchAccounts,
-    fetchKYC,
-    fetchNextOfKins,
-  } = useAccounts();
+  const { accounts, kycRecords } = useAccounts();
   const { loanApplications } = useLoans();
   const { investments } = useInvestments();
   const { goals } = useSavings();
@@ -31,16 +23,18 @@ export default function DashboardPage() {
 
   const account = accounts?.[0]; // Assuming one account per user
   const kyc = kycRecords?.[0];
+
   const activeLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Approved") || [];
   const pendingLoans = loanApplications.filter((loan: LoanApplication) => loan.status === "Pending") || [];
   const [isDepositOpen, setDepositOpen] = useState(false);
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
-      <Button onClick={() => setDepositOpen(true)} className="bg-blue-600 text-white">
-          Deposit
-        </Button>
+
+      <div className="w-full flex flex-row justify-between" >
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <DepositButton accountId={account.account_number} />
+      </div>
       <Separator className="my-4" />
 
       {/* Account Summary */}
@@ -87,13 +81,24 @@ export default function DashboardPage() {
             <CardContent>
               {activeLoans.length > 0 ? (
                 activeLoans.map((loan) => (
-                  <p key={loan.id}>
-                    {loan.loan_type} - {formatCurrency(loan.amount_approved as string)}
-                  </p>
+                  <p key={loan.id}>{loan.loan_type} - {formatCurrency(loan.amount_approved)}</p>
                 ))
               ) : (
                 <p>No active loans</p>
               )}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="mt-2 w-full">View Details</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Active Loans</DialogTitle>
+                  </DialogHeader>
+                  {activeLoans.map((loan) => (
+                    <p key={loan.id}>{loan.loan_type} - {formatCurrency(loan.amount_approved)}</p>
+                  ))}
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
           <Card>
@@ -103,9 +108,7 @@ export default function DashboardPage() {
             <CardContent>
               {pendingLoans.length > 0 ? (
                 pendingLoans.map((loan) => (
-                  <p key={loan.id}>
-                    {loan.loan_type} - {formatCurrency(loan.amount_requested)}
-                  </p>
+                  <p key={loan.id}>{loan.loan_type} - {formatCurrency(loan.amount_requested)}</p>
                 ))
               ) : (
                 <p>No pending loans</p>
@@ -181,6 +184,23 @@ export default function DashboardPage() {
             )}
           </CardContent>
         </Card>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="mt-2 w-full">View All Transactions</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Transaction History</DialogTitle>
+            </DialogHeader>
+            {transactions.map((txn) => (
+              <div key={txn.id} className="flex justify-between py-2 border-b last:border-none">
+                <span>{txn.transaction_type}</span>
+                <span className="font-bold">{formatCurrency(txn.amount)}</span>
+                <span className="text-sm text-gray-500">{formatDate(txn.date)}</span>
+              </div>
+            ))}
+          </DialogContent>
+        </Dialog>
       </div>
        {/* Deposit Modal */}
        {isDepositOpen && <DepositModal isOpen={isDepositOpen} onClose={() => setDepositOpen(false)} />}
