@@ -203,7 +203,7 @@ export function GoalsList() {
                   </Button> */}
 
                   {/* ✅ Save to Goal Button */}
-                  <SaveToGoalButton goalId={goal.id.toString()} accountId={goal.account.toString()} />
+                  <SaveToGoalButton goal={goal.id} accountId={goal.account.toString()} />
                 </div>
               </CardContent>
             </Card>

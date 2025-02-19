@@ -99,7 +99,7 @@ export default function LoanDetails({ loanId, onBack }: LoanDetailsProps) {
 
             {/* Loan Payment Button */}
             <div className="mt-6">
-              <LoanPaymentButton />
+              <LoanPaymentButton  accountId={loan.account}/>
             </div>
 
             {/* Back Button */}

@@ -83,9 +83,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
         case "investment":
           response = await depositToInvestment({ ...data, investmentId: extraId });
           break;
-        case "savings":
-          response = await depositToSavings({ ...data, goal: extraId });
-          break;
+  case "savings":
+        response = await depositToSavings({ 
+          ...data, 
+          goal: extraId,  // Ensure "goal" is used, not "goalId"
+          account: data.account_id // Explicitly pass account
+        });
+        break;
         case "minimumShares":
           response = await initiateMinimumSharesDepositPayment(data);
           break;

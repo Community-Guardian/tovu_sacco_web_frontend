@@ -134,7 +134,7 @@ export function InvestmentsList() {
                   <Progress value={progressValue} />
                 </div>
 
-                <InvestButton investmentId={investment.id.toString()} />
+                <InvestButton investmentId={investment.id.toString()}  />
               </CardContent>
             </Card>
           )
