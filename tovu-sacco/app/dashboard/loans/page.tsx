@@ -4,17 +4,17 @@ import { useState, useDeferredValue } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoanApplications } from "./components/loan-applications";
 import { AvailableLoanTypes } from "./components/available-loan-types";
-
 import { useToast } from "@/components/ui/use-toast";
+import { Spinner } from "@/components/ui/spinner"; // Import the Spinner component
 
 export default function LoansPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"applications" | "available">("applications");
-  const deferredTab = useDeferredValue(activeTab); // Smoothens UI responsiveness
+  const deferredTab = useDeferredValue(activeTab);
   const [loading, setLoading] = useState(false);
 
   const handleTabChange = (tab: "applications" | "available") => {
-    if (activeTab === tab) return; // Avoid unnecessary updates
+    if (activeTab === tab) return;
     setLoading(true);
     setActiveTab(tab);
 
@@ -24,7 +24,7 @@ export default function LoansPage() {
         title: "Tab Switched",
         description: tab === "applications" ? "Viewing your loan applications" : "Browsing available loans",
       });
-    }, 500);
+    }, 1000); // Show loading for 1 second
   };
 
   return (
@@ -59,7 +59,9 @@ export default function LoansPage() {
 
         <TabsContent value="applications" className="space-y-4">
           {loading && deferredTab === "applications" ? (
-            <p className="text-center text-muted-foreground animate-pulse">Loading My Loans...</p>
+            <div className="flex justify-center items-center py-10">
+              <Spinner className="h-8 w-8 text-primary" />
+            </div>
           ) : (
             <LoanApplications />
           )}
@@ -67,7 +69,9 @@ export default function LoansPage() {
 
         <TabsContent value="available">
           {loading && deferredTab === "available" ? (
-            <p className="text-center text-muted-foreground animate-pulse">Loading Available Loans...</p>
+            <div className="flex justify-center items-center py-10">
+              <Spinner className="h-8 w-8 text-primary" />
+            </div>
           ) : (
             <AvailableLoanTypes />
           )}

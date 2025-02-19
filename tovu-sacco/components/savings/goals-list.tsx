@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSavings } from "@/context/SavingsContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -23,11 +23,11 @@ import { useToast } from "@/hooks/use-toast";
 import { EditGoalDialog } from "./edit-goal-dialog";
 import { GoalDetailsDialog } from "./goal-details-dialog";
 import { MakeDepositDialog } from "./make-deposit-dialog";
+import { SaveToGoalButton } from "@/components/payments/TransactionButtons"; // ✅ Import SaveToGoalButton
 import {
   Calendar,
   MoreVertical,
   Pencil,
-  PiggyBank,
   Plus,
   Trash2,
 } from "lucide-react";
@@ -35,7 +35,7 @@ import { formatCurrency } from "@/lib/utils";
 import type { Goal } from "@/types/savings";
 
 export function GoalsList() {
-  const { goals, loading, error, deleteGoal,fetchGoals } = useSavings();
+  const { goals, loading, error, deleteGoal, fetchGoals } = useSavings();
   const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "completed" | string>("all");
@@ -43,9 +43,12 @@ export function GoalsList() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [showDepositDialog, setShowDepositDialog] = useState(false);
+
   useEffect(() => {
     fetchGoals();
-  }, [showDepositDialog,showDetailsDialog]);
+   
+  }, [showDepositDialog, showDetailsDialog]);
+
   const filteredGoals = goals.filter((goal) => {
     const matchesSearch = goal.name.toLowerCase().includes(search.toLowerCase());
     const matchesFilter =
@@ -186,17 +189,22 @@ export function GoalsList() {
                   </span>
                 </div>
 
-                {/* Deposit Button */}
-                <Button
-                  className="w-full mt-4"
-                  onClick={() => {
-                    setSelectedGoal(goal);
-                    setShowDepositDialog(true);
-                  }}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Deposit
-                </Button>
+                {/* Buttons */}
+                <div className="flex flex-col space-y-2 mt-4">
+                  {/* <Button
+                    className="w-full"
+                    onClick={() => {
+                      setSelectedGoal(goal);
+                      setShowDepositDialog(true);
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Deposit
+                  </Button> */}
+
+                  {/* ✅ Save to Goal Button */}
+                  <SaveToGoalButton goalId={goal.id.toString()} accountId={goal.account.toString()} />
+                </div>
               </CardContent>
             </Card>
           );

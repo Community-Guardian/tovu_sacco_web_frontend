@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useNotifications } from "@/context/NotificationContexts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Bell, Check, Info, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import { useToast } from "@/hooks/use-toast";
+import { Spinner } from "@/components/ui/spinner"; // Import the Spinner component
 
 export default function NotificationsPage() {
   const {
@@ -17,6 +19,15 @@ export default function NotificationsPage() {
     loading,
   } = useNotifications();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate a 1-second loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
 
   const notifications = [...userNotifications, ...adminNotifications].sort(
     (a, b) => dayjs(b.date_sent).valueOf() - dayjs(a.date_sent).valueOf()
@@ -60,13 +71,17 @@ export default function NotificationsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Notifications</h2>
-        <Button variant="outline" onClick={handleMarkAllAsRead} disabled={loading}>
+        <Button variant="outline" onClick={handleMarkAllAsRead} disabled={loading || isLoading}>
           <Check className="mr-2 h-4 w-4" />
           Mark All as Read
         </Button>
       </div>
 
-      {notifications.length === 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center py-10">
+          <Spinner className="h-8 w-8 text-primary" />
+        </div>
+      ) : notifications.length === 0 ? (
         <div className="flex flex-col items-center justify-center space-y-2 text-gray-500">
           <Bell className="h-10 w-10" />
           <p>No new notifications</p>
@@ -78,7 +93,7 @@ export default function NotificationsPage() {
               key={notification.id}
               className={cn(
                 "transition-colors hover:bg-muted/50",
-                !notification.is_read && "border-l-4 border-l-primary"
+                !notification.is_read && "border-l-4 border-l-primary bg-blue-50"
               )}
             >
               <CardHeader>

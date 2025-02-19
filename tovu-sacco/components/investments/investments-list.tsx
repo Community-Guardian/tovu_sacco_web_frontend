@@ -4,13 +4,13 @@ import { useEffect, useState } from "react"
 import { useInvestments } from "@/context/InvestmentsContext"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { InvestDialog } from "./invest-dialog"
 import { AlertCircle, Calendar, DollarSign, Percent } from 'lucide-react'
 import { formatCurrency } from "@/lib/utils"
 import type { Investment } from "@/types/investments"
+import { InvestButton } from "@/components/payments/TransactionButtons";
 
 export function InvestmentsList() {
   const {
@@ -134,16 +134,7 @@ export function InvestmentsList() {
                   <Progress value={progressValue} />
                 </div>
 
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    setSelectedInvestment(investment)
-                    setShowInvestDialog(true)
-                  }}
-                  disabled={!investment.is_active}
-                >
-                  Invest Now
-                </Button>
+                <InvestButton investmentId={investment.id.toString()} />
               </CardContent>
             </Card>
           )

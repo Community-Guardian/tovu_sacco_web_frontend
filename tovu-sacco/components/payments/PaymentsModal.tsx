@@ -31,7 +31,6 @@ interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId, extraId, isOpen, onClose }) => {
   const { toast } = useToast();
   const {
@@ -59,15 +58,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
       payment_method: "mpesa",
       phone_number: "",
       amount: 1,
-    //   description: "",
-      account_id: accountId,
+      account_id: accountId || "",
       extra_id: extraId || "",
     },
   });
 
   const selectedMethod = watch("payment_method");
 
-  // Function to initiate a transaction
   const handleTransaction = async (data: any) => {
     setLoading(true);
     let response;
@@ -84,19 +81,22 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
           response = await payLoan(data);
           break;
         case "investment":
-          response = await depositToInvestment(data);
+          response = await depositToInvestment({ ...data, investmentId: extraId });
           break;
         case "savings":
-          response = await depositToSavings(data);
+          response = await depositToSavings({ ...data, goal: extraId });
           break;
         case "minimumShares":
           response = await initiateMinimumSharesDepositPayment(data);
           break;
+        default:
+          toast({ title: "Error", description: "Invalid transaction type.", variant: "destructive" });
+          setLoading(false);
+          return;
       }
 
       if (response) {
-        const transactionId = response;
-        setTransactionId(transactionId);
+        setTransactionId(response);
         toast({ title: "Transaction Initiated", description: "Waiting for confirmation..." });
         setCheckingStatus(true);
       } else {
@@ -109,12 +109,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
     }
   };
 
-  // Function to check transaction status
+  // Polling Transaction Status
   useEffect(() => {
     if (!checkingStatus || !transactionId) return;
 
     let status = "pending";
-    const timeout = Date.now() + 30000; // 30 seconds timeout
+    const timeout = Date.now() + 30000;
     let retries = 0;
 
     const interval = setInterval(async () => {
@@ -126,23 +126,20 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
       }
 
       retries++;
-      console.log(`Retry ${retries}: Checking transaction status for ${transactionType}...`);
-
       try {
         const transaction = await fetchTransactionByType(transactionId, transactionType);
-        if(transaction){
-        status = transaction[0]?.status || "pending";
+        status = transaction?.[0]?.status || "pending";
 
-        if (status == "completed") {
+        if (status === "completed") {
           toast({ title: "Success", description: "Transaction completed successfully!" });
           setCheckingStatus(false);
           clearInterval(interval);
           onClose();
-        } else if (status == "failed") {
+        } else if (status === "failed") {
           toast({ title: "Failed", description: "Transaction failed. Please try again.", variant: "destructive" });
           setCheckingStatus(false);
           clearInterval(interval);
-        }}
+        }
       } catch (error) {
         console.error("Error checking transaction status:", error);
       }
@@ -166,18 +163,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
         </DialogHeader>
 
         <form onSubmit={handleSubmit(handleTransaction)} className="space-y-4">
-          {/* Payment Method */}
           <div>
             <label className="text-sm font-medium">Payment Method</label>
             <select {...register("payment_method")} className="w-full mt-1 border rounded-md p-2">
               <option value="mpesa">M-Pesa</option>
-              {/* <option value="paypal">PayPal</option>
-              <option value="bank_transfer">Bank Transfer</option> */}
               <option value="in-house">In-House</option>
             </select>
           </div>
 
-          {/* Phone Number (Only for M-Pesa) */}
           {selectedMethod === "mpesa" && (
             <div>
               <label className="text-sm font-medium">Phone Number</label>
@@ -186,20 +179,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ transactionType, accountId,
             </div>
           )}
 
-          {/* Amount */}
           <div>
             <label className="text-sm font-medium">Amount (KSh)</label>
             <Input type="number" placeholder="Enter Amount" {...register("amount", { valueAsNumber: true })} />
             {errors.amount && <p className="text-red-500 text-xs">{errors.amount.message}</p>}
           </div>
 
-          {/* Description */}
-          {/* <div>
-            <label className="text-sm font-medium">Description</label>
-            <Input type="text" placeholder="Enter Description" {...register("description")} />
-          </div> */}
-
-          {/* Submit Button */}
           <Button type="submit" disabled={loading || checkingStatus} className="w-full">
             {loading ? "Processing..." : "Proceed"}
           </Button>

@@ -1,15 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { TransactionTable } from "@/components/transactions/transaction-table"
 import { TransactionFilters } from "@/components/transactions/transaction-filters"
 import { useToast } from "@/hooks/use-toast"
+import { Loader2 } from "lucide-react"
 
 export default function TransactionsPage() {
   const { toast } = useToast()
   const [search, setSearch] = useState("")
   const [type, setType] = useState("all")
   const [date, setDate] = useState<Date>()
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Simulate a 1-second loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+    return () => clearTimeout(timer) // Cleanup timer on unmount
+  }, [])
 
   const handleDownload = async () => {
     try {
@@ -34,15 +44,23 @@ export default function TransactionsPage() {
         <p className="text-muted-foreground">View and manage all your financial transactions</p>
       </div>
 
-      <TransactionFilters
-        onSearch={setSearch}
-        onTypeChange={setType}
-        onDateChange={setDate}
-        onDownload={handleDownload}
-      />
+      {/* Show loader for 1 second before displaying the content */}
+      {isLoading ? (
+        <div className="flex justify-center items-center py-10">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <>
+          <TransactionFilters
+            onSearch={setSearch}
+            onTypeChange={setType}
+            onDateChange={setDate}
+            onDownload={handleDownload}
+          />
 
-      <TransactionTable search={search} type={type} date={date} />
-</div>
+          <TransactionTable search={search} type={type} date={date} />
+        </>
+      )}
+    </div>
   )
 }
-

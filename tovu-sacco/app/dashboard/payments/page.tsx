@@ -18,9 +18,9 @@ const Payments = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <DepositButton accountId="ACC4668893311" />
         <WithdrawButton accountId="12345" />
-        <LoanPaymentButton />
-        <InvestButton investmentId="54321" />
-        <SaveToGoalButton goalId="67890" />
+        <LoanPaymentButton accountId="ACC4668893311" />
+        <InvestButton investmentId="5" accountId="ACC4668893311"/>
+        <SaveToGoalButton goalId="3"accountId="ACC4668893311" />
         <MinimumSharesButton accountId="12345" />
       </div>
     </div>

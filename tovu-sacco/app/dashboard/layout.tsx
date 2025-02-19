@@ -85,6 +85,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [accounts, loading]);
 
+  // 🔹 Check user permissions for access
+  useEffect(() => {
+    if (!loading && user) {
+      const allowedRoles = ["customer"]; // Replace with actual role logic
+      if (!allowedRoles.includes(user.role)) {
+        router.replace("/not-found/forbidden");
+      }
+    }
+  }, [user, loading, router]);
+
   // Sort notifications by date
   const notifications = [...userNotifications, ...adminNotifications].sort(
     (a, b) => dayjs(b.date_sent).valueOf() - dayjs(a.date_sent).valueOf()

@@ -1,13 +1,14 @@
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { Metadata } from "next"
-import { AuthProvider } from "@/context/AuthContext"
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Metadata } from "next";
+import { AuthProvider } from "@/context/AuthContext";
 import { AccountsProvider } from "@/context/AccountsContext";
-import { ToastProvider } from "@/components/ui/toast"
+import { ToastProvider } from "@/components/ui/toast";
 import { Toaster } from "@/components/ui/toaster";
-import { NotificationsProvider, useNotifications } from "@/context/NotificationContexts";
+import { NotificationsProvider } from "@/context/NotificationContexts";
+import { notFound } from "next/navigation"; // Import Next.js' built-in 404 handler
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Tovu Sacco",
@@ -16,11 +17,12 @@ export const metadata: Metadata = {
     icon: "/assets/download.jpeg",
     apple: "/assets/download.jpeg",
   },
-}
+};
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -31,7 +33,7 @@ export default function RootLayout({
               <ToastProvider>
                 <AuthProvider>
                   <AccountsProvider>
-                    {children}
+                    {children || notFound()} {/* Ensures invalid routes trigger 404 */}
                     <Toaster />
                   </AccountsProvider>
                 </AuthProvider>
@@ -41,6 +43,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  )
+  );
 }
-

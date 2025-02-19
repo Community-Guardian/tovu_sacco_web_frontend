@@ -133,7 +133,7 @@ export function SecuritySettings() {
           </Form>
         </div>
 
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
           <div className="flex items-center space-x-4">
             <Switch checked={twoFactor} onCheckedChange={handleTwoFactorChange} disabled={loading} />
@@ -144,7 +144,7 @@ export function SecuritySettings() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Active Sessions</h3>

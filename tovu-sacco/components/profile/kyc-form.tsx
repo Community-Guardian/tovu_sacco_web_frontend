@@ -247,19 +247,19 @@ export function KYCForm() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="id_number"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem>
-                    <FormLabel>ID Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} className={cn(error && "border-destructive")} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+<FormField
+  control={form.control}
+  name="id_number"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>ID Number</FormLabel>
+      <FormControl>
+        <Input {...field} readOnly className="cursor-not-allowed bg-gray-200" />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
 
               <div className="space-y-2">
                 <FormLabel>Identity Image</FormLabel>

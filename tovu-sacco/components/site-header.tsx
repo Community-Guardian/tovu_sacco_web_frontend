@@ -48,7 +48,7 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center space-x-2">
             <Link href="/login">
-              <Button>login</Button>
+              <Button>Login | Register</Button>
             </Link>
           </div>
         </div>

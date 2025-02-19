@@ -29,18 +29,19 @@ export const WithdrawButton: React.FC<{ accountId: string }> = ({ accountId }) =
   <TransactionButton type="withdraw" label="Withdraw" extraData={{ accountId }} />
 );
 
-export const LoanPaymentButton: React.FC = () => (
-  <TransactionButton type="loan" label="Pay Loan" />
+export const LoanPaymentButton: React.FC<{ accountId: string }> = ({ accountId }) => (
+  <TransactionButton type="loan" label="Pay Loan" extraData={{ accountId }} />
 );
 
-export const InvestButton: React.FC<{ investmentId: string }> = ({ investmentId }) => (
-  <TransactionButton type="investment" label="Invest" extraData={{ investmentId }} />
+export const InvestButton: React.FC<{ investmentId: string; accountId: string }> = ({ investmentId, accountId }) => (
+  <TransactionButton type="investment" label="Invest" extraData={{ investmentId, accountId }} />
 );
 
-export const SaveToGoalButton: React.FC<{ goalId: string }> = ({ goalId }) => (
-  <TransactionButton type="savings" label="Save to Goal" extraData={{ goalId }} />
+export const SaveToGoalButton: React.FC<{ goalId: string; accountId: string }> = ({ goalId, accountId }) => (
+  <TransactionButton type="savings" label="Save to Goal" extraData={{ goalId, accountId }} />
 );
 
 export const MinimumSharesButton: React.FC<{ accountId: string }> = ({ accountId }) => (
   <TransactionButton type="minimumShares" label="Deposit Minimum Shares" extraData={{ accountId }} />
 );
+

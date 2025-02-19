@@ -12,6 +12,15 @@ import { Loader2 } from "lucide-react"
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("personal")
   const { user, fetchUser, loading } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate a 1-second loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -20,8 +29,8 @@ export default function ProfilePage() {
         <p className="text-muted-foreground">Manage your account settings and set your preferences</p>
       </div>
 
-      {/* Show loader while fetching user data */}
-      {loading ? (
+      {/* Show loader while fetching user data or during the initial delay */}
+      {loading || isLoading ? (
         <div className="flex justify-center items-center py-10">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
