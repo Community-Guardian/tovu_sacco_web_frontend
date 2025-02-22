@@ -20,7 +20,7 @@ const Payments = () => {
         <WithdrawButton accountId="12345" />
         <LoanPaymentButton accountId="ACC4668893311" />
         <InvestButton investmentId="5" accountId="ACC4668893311"/>
-        <SaveToGoalButton goalId="3"accountId="ACC4668893311" />
+        <SaveToGoalButton goal="5" accountId="ACC4668893311" />
         <MinimumSharesButton accountId="12345" />
       </div>
     </div>
