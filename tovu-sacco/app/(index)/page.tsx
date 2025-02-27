@@ -27,7 +27,7 @@ export default function Home() {
                 wealth with our community-focused solutions.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
-                <Link href="/signup" >
+                <Link href="/login" >
                   <Button size="lg" className="bg-primary text-lg" >
                       Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -327,7 +327,7 @@ export default function Home() {
               financial goals. Join us today and see how far your savings can take you!
             </p>
             <div className="flex flex-col gap-4 sm:flex-row justify-center">
-              <Link href="/membership">
+              <Link href="/login">
                 <Button size="lg" className="bg-primary min-w-[200px]">
                   Join Now
                 </Button>
