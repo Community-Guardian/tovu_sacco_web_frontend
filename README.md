@@ -27,7 +27,7 @@ Tovu Sacco Web Frontend is a web application designed to manage savings, transac
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/tovu_sacco_web_frontend.git
+   git clone https://github.com/Community-Guardian//tovu_sacco_web_frontend.git
    cd tovu_sacco_web_frontend
    ```
 
@@ -70,7 +70,7 @@ Tovu Sacco Web Frontend is a web application designed to manage savings, transac
 ## Screenshots
 
 ### Dashboard
-![Dashboard Screenshot](screenshots/dashboard.png)
+![tovuweb](https://github.com/user-attachments/assets/85d2c5c9-f141-4f62-86e1-7bdb89c41c59)
 
 
 ## Contributing
